@@ -1,0 +1,3 @@
+[submodule "OMP"]
+	path = OMP
+	url = git@github.com:LNKLEO/OMP
