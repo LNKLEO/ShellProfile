@@ -1,3 +1,6 @@
 [submodule "OMP"]
 	path = OMP
 	url = git@github.com:LNKLEO/OMP
+[submodule "PSFetch"]
+	path = PSFetch
+	url = git@github.com:LNKLEO/PSFetch
