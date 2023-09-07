@@ -123,7 +123,7 @@
           "foreground": "#000000",
           "leading_diamond": "<#2343e2,#f8677b></>",
           "properties": {
-            "style": "letter"
+            "style": "full"
           },
           "style": "diamond",
           "template": "{{.Path}}",
