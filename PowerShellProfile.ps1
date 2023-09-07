@@ -15,8 +15,9 @@ Set-PSReadLineKeyHandler -Key DownArrow -ScriptBlock {
 Set-Alias code code-insiders
 
 if ($env:OS -eq "Windows_NT") {
-    $env:PATH = $env:PATH + $env:PATH + ";C:\SHELL\OMP\"
+    $env:PATH = $env:PATH + $env:PATH + ";C:\SHELL\OMP;C:\SHELL\PSFetch"
     C:\Shell\OMP\OMP init pwsh --config "C:\Shell\ifl.omp.json" | Invoke-Expression
+    PSFetch
 
     $architecture = $env:PROCESSOR_ARCHITECTURE.ToLower().Replace("amd", "x")
 
