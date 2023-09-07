@@ -63,12 +63,12 @@ function Edit-Profile {
     code $PROFILE
 }
 
-function Edit-PoshTheme {
+function Edit-OMPTheme {
     if ($env:OS -eq "Windows_NT") {
-        code "${env:OneDrive}\Documents\PowerShell\ifl.omp.json"
+        code "C:\Shell\ifl.omp.json"
     }
     else {
-        code "/mnt/c/Users/LNKLEO/Documents/PowerShell/ifl.omp.json"
+        code "/Shell/ifl.omp.json"
     }
 }
 
@@ -191,42 +191,4 @@ function Start-AngryBirds {
             Write-Output "        $K for $V"
         } 
     }
-}
-
-function Update-Docs {
-    $TOC = @{
-        "C.EN.PDF"      = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fcpp%2Fc-language%2Ftoc.json%3Fview%3Dmsvc-170"
-        "C.ZH.PDF"      = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fcpp%2Fc-language%2Ftoc.json%3Fview%3Dmsvc-170"
-        "CPP.EN.PDF"    = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fcpp%2Fcpp%2Ftoc.json%3Fview%3Dmsvc-170"
-        "CPP.ZH.PDF"    = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fcpp%2Fcpp%2Ftoc.json%3Fview%3Dmsvc-170"
-        "CLI.EN.PDF"    = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fcpp%2Fdotnet%2Ftoc.json%3Fview%3Dmsvc-170"
-        "CLI.ZH.PDF"    = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fcpp%2Fdotnet%2Ftoc.json%3Fview%3Dmsvc-170"
-        "CSHARP.EN.PDF" = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fdotnet%2Fcsharp%2Ftoc.json"
-        "CSHARP.ZH.PDF" = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fdotnet%2Fcsharp%2Ftoc.json"
-        "FSHARP.EN.PDF" = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fdotnet%2Ffsharp%2Ftoc.json"
-        "FSHARP.ZH.PDF" = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fdotnet%2Ffsharp%2Ftoc.json"
-        "DOTNET.EN.PDF" = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fdotnet%2Ffundamentals%2Ftoc.json"
-        "DOTNET.ZH.PDF" = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fdotnet%2Ffundamentals%2Ftoc.json"
-        "HLSL.EN.PDF"   = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fwindows%2Fwin32%2Fdirect3dhlsl%2Ftoc.json"
-        "HLSL.ZH.PDF"   = "https://learn.microsoft.com/pdf?url=https%3A%2F%2Flearn.microsoft.com%2Fzh-cn%2Fwindows%2Fwin32%2Fdirect3dhlsl%2Ftoc.json"
-    }
-
-    $REF = @{
-        "C.EN.PDF"      = "https:\\learn.microsoft.com\en-us\cpp\c-language\toc.json?view=msvc-170"
-        "C.ZH.PDF"      = "https:\\learn.microsoft.com\zh-cn\cpp\c-language\toc.json?view=msvc-170"
-        "CPP.EN.PDF"    = "https:\\learn.microsoft.com\en-us\cpp\cpp\toc.json?view=msvc-170"
-        "CPP.ZH.PDF"    = "https:\\learn.microsoft.com\zh-cn\cpp\cpp\toc.json?view=msvc-170"
-        "CLI.EN.PDF"    = "https:\\learn.microsoft.com\en-us\cpp\dotnet\toc.json?view=msvc-170"
-        "CLI.ZH.PDF"    = "https:\\learn.microsoft.com\zh-cn\cpp\dotnet\toc.json?view=msvc-170"
-        "CSHARP.EN.PDF" = "https:\\learn.microsoft.com\en-us\dotnet\csharp\toc.json"
-        "CSHARP.ZH.PDF" = "https:\\learn.microsoft.com\zh-cn\dotnet\csharp\toc.json"
-        "FSHARP.EN.PDF" = "https:\\learn.microsoft.com\en-us\dotnet\fsharp\toc.json"
-        "FSHARP.ZH.PDF" = "https:\\learn.microsoft.com\zh-cn\dotnet\fsharp\toc.json"
-        "DOTNET.EN.PDF" = "https:\\learn.microsoft.com\en-us\dotnet\fundamentals\toc.json"
-        "DOTNET.ZH.PDF" = "https:\\learn.microsoft.com\zh-cn\dotnet\fundamentals\toc.json"
-        "HLSL.EN.PDF"   = "https:\\learn.microsoft.com\en-us\windows\win32\direct3dhlsl\toc.json"
-        "HLSL.ZH.PDF"   = "https:\\learn.microsoft.com\zh-cn\windows\win32\direct3dhlsl\toc.json"
-    }
-
-    $TOC.GetEnumerator() | ForEach-Object -Parallel { Invoke-WebRequest $_.Value -O $_.Key }
 }
