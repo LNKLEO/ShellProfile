@@ -95,7 +95,7 @@ $DL = $(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Se
 function Update-DotNETSDK {
     $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
     $current = $(dotnet --list-sdks | Select-String "[^ ]*").Matches | Select-Object -ExpandProperty Value
-    if (-Not $current.Contains($latest)) {
+    if (-not $current.Contains($latest)) {
         Write-Output "Updating .NET SDK to ${latest} (from ${current})"
         Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-installer-main\].*(https.*exe)").Matches[0].Groups[1].Value -OutFile "${DL}\dotnet-sdk-${latest}-x64.exe" -Resume
         &"${DL}\dotnet-sdk-${latest}-x64.exe" /passive
@@ -132,9 +132,9 @@ function Update-Go {
         }
     }
 
-    $latest = $($($(Invoke-WebRequest https://go.dev/dl).Content | Select-String  -AllMatches ">go(([0-9]*)`.([0-9]*)((`.|beta|rc)([0-9]*))?).windows-amd64.msi<").Matches | ForEach-Object { [GoVersion]$_ } | Sort-Object -Descending Major, Minor, Branch, Revision)[0]
+    $latest = $($($(Invoke-WebRequest https://go.dev/dl).Content | Select-String  -AllMatches ">go(([0-9]*)`.([0-9]*)((`.|beta|rc)([0-9]*))?).windows-amd64.msi<").Matches | ForEach-Object { [GoVersion]$_ } | Sort-Object -Descending Major, Minor, Branch, Revision)[0].Version
     $current = $(go version | Select-String " go([^ ]*) ").Matches[0].Groups[1].Value
-    if ($latest -eq $current) {
+    if ($latest -ne $current) {
         Write-Output "Updating Go ${current} to ${latest}"
         Invoke-WebRequest "https://go.dev/dl/go${latest}.windows-amd64.msi" -OutFile "${DL}\go${latest}.windows-amd64.msi" -Resume
         msiexec /i "${DL}\go${latest}.windows-amd64.msi" /passive
