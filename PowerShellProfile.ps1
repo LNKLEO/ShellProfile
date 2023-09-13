@@ -96,7 +96,7 @@ function Update-DotNETSDK {
     $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
     $current = $(dotnet --list-sdks | Select-String "[^ ]*").Matches | Select-Object -ExpandProperty Value
     if (-not $current.Contains($latest)) {
-        Write-Output "Updating .NET SDK to ${latest} (from ${current})"
+        Write-Output "Updating .NET SDK ${current} to ${latest}"
         Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-installer-main\].*(https.*exe)").Matches[0].Groups[1].Value -OutFile "${DL}\dotnet-sdk-${latest}-x64.exe" -Resume
         &"${DL}\dotnet-sdk-${latest}-x64.exe" /passive
     }
@@ -106,7 +106,7 @@ function Update-NodeJS {
     $latest = $($($($(Invoke-WebRequest https://nodejs.org/download/nightly/).Content | Select-String -AllMatches ">(v[^-]*-nightly([0-9]{8})[0-9a-z]*)/.*([0-9:]{5})").Matches | Sort-Object -Descending { $_.Groups[2], $_.Groups[3] }))[0].Groups[1].Value
     $current = $(node -v)
     if ($latest -ne $current) {
-        Write-Output "Updating Node.JS to ${latest} (from ${current})"
+        Write-Output "Updating Node.JS ${current} to ${latest}"
         Invoke-WebRequest "https://nodejs.org/download/nightly/${latest}/node-${latest}-x64.msi" -OutFile "${DL}\node-${latest}-x64.msi" -Resume
         msiexec /i "${DL}\node-${latest}-x64.msi" /passive
     }    
@@ -141,11 +141,21 @@ function Update-Go {
     }
 }
 
+function Update-FFmpeg {
+    $latest = $($(Invoke-WebRequest -AllowInsecureRedirect https://www.gyan.dev/ffmpeg/builds).Content | Select-String "version: <span id=`"git-version`">(20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
+    $current = $(ffmpeg -version | Select-String "ffmpeg version (20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
+    if ($latest -gt $current) {
+        Write-Output "Updating FFmpeg ${current} to ${latest}"
+        Invoke-WebRequest "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z" -OutFile "${DL}\ffmpeg-${latest}-git-full.7z" -Resume
+        # Expand-Archive -Force "${DL}\ffmpeg-${latest}-git-full.7z" "C:\Program Files\FFmpeg\" 
+    }
+}
+
 function Update-Kodi {
     $latest = $($($(Invoke-WebRequest "https://mirrors.kodi.tv/nightlies/windows/win64/master/").Content | Select-String "KodiSetup-([0-9a-f-]*)-master-x64.exe.*([0-9]{4}.*[0-9]{2})").Matches)[0]
     $latestversion = $latest.Groups[1].Value
     $latest = [DateTime]$latest.Groups[2].Value
-    $current = $(Get-ItemProperty 'C:\Program Files\Kodi\Kodi.exe').CreationTime
+    $current = $(Get-ItemProperty "C:\Program Files\Kodi\Kodi.exe").CreationTime
     if ($latest -gt $current) {
         Write-Output "Updating Kodi to ${latestversion}"
         Invoke-WebRequest "https://mirrors.kodi.tv/nightlies/windows/win64/master/KodiSetup-${latestversion}-master-x64.exe" -OutFile "${DL}\KodiSetup-${latestversion}-master-x64.exe" -Resume
