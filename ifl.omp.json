@@ -217,7 +217,7 @@
           "background_templates": [
             "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
           ],
-          "trailing_diamond": "",
+          "trailing_diamond": "<#16e11b,transparent></>",
           "template": "<#ffffff>ﲵ</>",
           "properties": {
             "always_enabled": true
