@@ -217,7 +217,7 @@
           "background_templates": [
             "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
           ],
-          "trailing_diamond": "<#16e11b,transparent></>",
+          "trailing_diamond": "",
           "template": "<#ffffff>ﲵ</>",
           "properties": {
             "always_enabled": true
@@ -232,7 +232,7 @@
         {
           "type": "networks",
           "style": "diamond",
-          "background": "#E0FFFF",
+          "background": "#CFFF7F",
           "foreground": "#222222",
           "leading_diamond": "",
           "trailing_diamond": "",
