@@ -1,6 +1,7 @@
-Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-Set-PSReadLineKeyHandler -Chord Tab -Function MenuComplete
+# Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
+
+Set-PSReadLineKeyHandler -Chord Tab -Function MenuComplete
 
 Set-PSReadLineKeyHandler -Key UpArrow -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::HistorySearchBackward()
