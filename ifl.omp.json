@@ -115,7 +115,7 @@
           },
           "leading_diamond": "",
           "style": "diamond",
-          "template": "{{regexReplaceAll \" \" .FormattedMs \"\"}}",
+          "template": "{{.PromptCount}}@{{regexReplaceAll \" \" .FormattedMs \"\"}}",
           "type": "executiontime"
         },
         {
