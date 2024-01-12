@@ -188,10 +188,32 @@ function Update-Kodi {
 }
 
 function Uninstall-UselessPackages {
+    sudo Uninstall-UselessPackagesInternal
+    
     winget uninstall Cortana
     winget uninstall Clipchamp
 
-    $(Remove-Item "HKCR:\Software\Microsoft\Windows NT\CurrentVersion\Fonts" -Force -Recurse)
+}
+
+function Uninstall-UselessPackagesInternal {
+    sudo Unregister-ScheduledTask *Edge* -Confirm:False
+    Get-ChildItem "C:\Program Files (x86)\Microsoft\EdgeWebView\*\Installer" -Recurse | Foreach-Object {
+        Push-Location $_
+        Copy-Item C:\SHELL\EDGEUNINSTALLER setup.exe
+        ./setup.exe --uninstall --force-uninstall --system-level --msedgewebview
+        Pop-Location
+    }
+
+    Get-ChildItem "C:\Program Files (x86)\Microsoft\Edge\*\Installer" -Recurse | Foreach-Object {
+        Push-Location $_
+        Copy-Item C:\SHELL\EDGEUNINSTALLER setup.exe
+        ./setup.exe --uninstall --force-uninstall --system-level --msedge
+        Pop-Location
+    }
+
+    Remove-Item -Recurse -Force "C:\Program Files (x86)\Microsoft"
+
+    Remove-Item "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts" -Force -Recurse
 }
 
 function Start-AngryBirds {
