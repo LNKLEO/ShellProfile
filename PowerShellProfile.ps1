@@ -62,7 +62,12 @@ else {
 }
 
 function Edit-Profile {
-    code $PROFILE
+    if ($env:OS -eq "Windows_NT") {
+        code "C:\Shell\PowerShellProfile.ps1"
+    }
+    else {
+        code "/Shell/PowerShellProfile.ps1"
+    }
 }
 
 function Edit-OMPTheme {
@@ -92,6 +97,24 @@ function Get-BatteryReport {
 }
 
 $DL = $(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
+
+function Update-PowerShell {
+    $latestbuild = $($(Invoke-WebRequest https://powershell.visualstudio.com/PowerShell/_build?definitionId=32).Content | Select-String "buildId=([0-9]{6})").Matches[0].Groups[1].Value
+    $latest = $($(Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=${latestbuild}") | Select-String "[0-9a-f]{40}").Matches[0].Value
+    $current = $($(Get-ItemProperty C:\PowerShell\pwsh.exe).VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
+    if ($latest -ne $current) {
+        $version = $(Get-ItemProperty C:\PowerShell\pwsh.exe).VersionInfo.FileVersion
+        Write-Output "Updating PowerShell ${version} ${current} to ${latest}"
+        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/${latestbuild}/artifacts?artifactName=build&api-version=7.1&%24format=zip" -OutFile "${DL}\PowerShell-${latest}.zip" -Resume
+        Expand-Archive -Force "${DL}\PowerShell-${latest}.zip" "${DL}\~PowerShell"
+        Expand-Archive -Force "${DL}\~PowerShell\build\build.zip" "${DL}\~PowerShell"
+        Remove-Item -Force -Recurse C:\PowerShell.old
+        Move-Item -Force C:\PowerShell\ C:\PowerShell.old
+        Move-Item -Force "${DL}\~PowerShell\publish" C:\PowerShell
+        Remove-Item -Force -Recurse "${DL}\~PowerShell"
+    }
+}
+
 
 function Update-DotNETSDK {
     $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
@@ -203,4 +226,9 @@ function Start-AngryBirds {
             Write-Output "        $K for $V"
         } 
     }
+}
+
+if (Test-Path -Path C:\PowerShell.old)
+{
+    Remove-Item -Force -Recurse C:\PowerShell.old
 }
