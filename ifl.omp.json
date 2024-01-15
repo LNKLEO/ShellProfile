@@ -36,7 +36,7 @@
           "foreground": "#cfcf9f",
           "leading_diamond": "",
           "style": "diamond",
-          "template": "{{if .WSL}}WSL{{else}}{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[{{div .SwapTotalMemory 1048576}}]MiB{{end}}",
+          "template": "{{if .WSL}}WSL{{else}}{{end}}{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[+{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[+{{div .SwapTotalMemory 1048576}}]MiB",
           "type": "sysinfo"
         },
         {
