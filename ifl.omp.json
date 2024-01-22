@@ -137,13 +137,13 @@
       "alignment": "right",
       "segments": [
         {
-          "background": "#ffeb3b",
+          "background": "#addb67",
           "foreground": "#193549",
           "leading_diamond": "",
           "style": "diamond",
           "trailing_diamond": "",
           "background_templates": [
-            "{{if or (.Working.Changed) (.Staging.Changed)}}#addb67{{end}}",
+            "{{if or (.Working.Changed) (.Staging.Changed)}}#ffeb3b{{end}}",
             "{{if and (gt .Ahead 0) (gt .Behind 0)}}#f78c6c{{end}}",
             "{{if gt .Ahead 0}}#21c7a8{{end}}",
             "{{if gt .Behind 0}}#c792ea{{end}}"
