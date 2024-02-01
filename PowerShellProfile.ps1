@@ -194,19 +194,19 @@ function Uninstall-UselessPackages {
 
 function Uninstall-BundledEdge {
     if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Groups -match "S-1-5-32-544") {
-        Unregister-ScheduledTask *Edge* -Confirm:$false
+        # Unregister-ScheduledTask *Edge* -Confirm:$false
 
-        sc delete edgeupdate
-        sc delete edgeupdatem
+        # sc delete edgeupdate
+        # sc delete edgeupdatem
 
-        taskkill /f /im MicrosoftEdgeUpdate.exe
+        # taskkill /f /im MicrosoftEdgeUpdate.exe
 
-        Get-ChildItem "C:\Program Files (x86)\Microsoft\EdgeWebView\*\Installer" -Recurse | Foreach-Object {
-            Push-Location $_
-            Copy-Item C:\SHELL\EDGEUNINSTALLER setup.exe
-            ./setup.exe --uninstall --force-uninstall --system-level --msedgewebview
-            Pop-Location
-        }
+        # Get-ChildItem "C:\Program Files (x86)\Microsoft\EdgeWebView\*\Installer" -Recurse | Foreach-Object {
+        #     Push-Location $_
+        #     Copy-Item C:\SHELL\EDGEUNINSTALLER setup.exe
+        #     ./setup.exe --uninstall --force-uninstall --system-level --msedgewebview
+        #     Pop-Location
+        # }
 
         Get-ChildItem "C:\Program Files (x86)\Microsoft\Edge\*\Installer" -Recurse | Foreach-Object {
             Push-Location $_
@@ -215,7 +215,7 @@ function Uninstall-BundledEdge {
             Pop-Location
         }
 
-        Remove-Item -Recurse -Force "C:\Program Files (x86)\Microsoft"
+        # Remove-Item -Recurse -Force "C:\Program Files (x86)\Microsoft"
 
         Remove-Item "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts" -Force -Recurse
     }
