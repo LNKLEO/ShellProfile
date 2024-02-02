@@ -91,7 +91,7 @@
           "trailing_diamond": "",
           "foreground": "#193549",
           "background": "#7FD5EA",
-          "template": "Go {{.Full}}"
+          "template": "Go {{upper .Full}}"
         }
       ],
       "type": "prompt"
