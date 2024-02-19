@@ -1,4 +1,9 @@
-# Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+Import-Module Posh-Git      
+Import-Module Terminal-Icons
+Import-Module Z             
+Import-Module PSFzf
+
+Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
 
 Set-PSReadLineKeyHandler -Chord Tab -Function MenuComplete
