@@ -148,7 +148,7 @@
             "{{if gt .Ahead 0}}#21c7a8{{end}}",
             "{{if gt .Behind 0}}#c792ea{{end}}"
           ],
-          "template": "{{regexReplaceAll \" \" .BranchStatus \"\"}}{{if .Working.Changed}}|{{regexReplaceAll \" \" .Working.String \"\"}}{{end}}{{if .Staging.Changed}}|{{regexReplaceAll \" \" .Staging.String \"\"}}{{end}}{{if gt .StashCount 0}}|{{.StashCount}}{{end}}{{.Ref}}@{{regexReplaceAll \".*/\" .RepoName \"\"}}{{if gt .WorktreeCount 0}}{{.WorktreeCount}}{{end}}{{if eq .UpstreamIcon \"\"}}{{else}}{{.UpstreamIcon}}{{end}}",
+          "template": "{{regexReplaceAll \" \" .BranchStatus \"\"}}{{if .Working.Changed}}|{{regexReplaceAll \" \" .Working.String \"\"}}{{end}}{{if .Staging.Changed}}|{{regexReplaceAll \" \" .Staging.String \"\"}}{{end}}{{if gt .StashCount 0}}|{{.StashCount}}{{end}}{{.Ref}}@{{regexReplaceAll \".*/\" .RepoName \"\"}}{{if gt .WorktreeCount 0}}{{.WorktreeCount}}{{end}}{{if eq .UpstreamIcon \"\"}}{{else}}{{.UpstreamIcon}}{{end}}",
           "properties": {
             "branch_icon": "",
             "git_icon": "",
