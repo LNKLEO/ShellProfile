@@ -182,15 +182,6 @@
           "type": "text"
         },
         {
-          "type": "root",
-          "style": "diamond",
-          "leading_diamond": "",
-          "trailing_diamond": "",
-          "foreground": "#111111",
-          "background": "#ffff66",
-          "template": ""
-        },
-        {
           "type": "session",
           "style": "diamond",
           "leading_diamond": "",
@@ -218,7 +209,7 @@
             "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
           ],
           "trailing_diamond": "",
-          "template": "<#ffffff>ﲵ</>",
+          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>ﲵ{{end}}</>",
           "properties": {
             "always_enabled": true
           }
