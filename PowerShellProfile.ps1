@@ -192,9 +192,36 @@ function Update-Kodi {
     }
 }
 
-function Uninstall-UselessPackages {
-    winget uninstall Cortana
-    winget uninstall Clipchamp
+function Update-LLVM-PostProcess {
+    Push-Location "C:\Program Files\LLVM\bin"
+
+    Remove-Item clang++.exe
+    Remove-Item clang-cpp.exe
+    Remove-Item clang-cl.exe
+    New-Item -ItemType HardLink -Name clang++.exe -Value clang.exe
+    New-Item -ItemType HardLink -Name clang-cpp.exe -Value clang.exe
+    New-Item -ItemType HardLink -Name clang-cl.exe -Value clang.exe
+
+    Remove-Item ld.lld.exe
+    Remove-Item ld64.lld.exe
+    Remove-Item wasm-ld.exe
+    Remove-Item lld-link.exe
+    New-Item -ItemType HardLink -Name ld.lld.exe -Value lld.exe
+    New-Item -ItemType HardLink -Name ld64.lld.exe -Value lld.exe
+    New-Item -ItemType HardLink -Name wasm-ld.exe -Value lld.exe
+    New-Item -ItemType HardLink -Name lld-link.exe -Value lld.exe
+
+    Remove-Item llvm-dlltool.exe
+    Remove-Item llvm-lib.exe
+    Remove-Item llvm-ranlib.exe
+    New-Item -ItemType HardLink -Name llvm-dlltool.exe -Value llvm-ar.exe
+    New-Item -ItemType HardLink -Name llvm-lib.exe -Value llvm-ar.exe
+    New-Item -ItemType HardLink -Name llvm-ranlib.exe -Value llvm-ar.exe
+
+    Remove-Item llvm-strip.exe
+    New-Item -ItemType HardLink -Name llvm-strip.exe -Value llvm-objcopy.exe
+
+    Pop-Location
 }
 
 function Uninstall-BundledEdge {
