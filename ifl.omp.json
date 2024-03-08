@@ -242,13 +242,13 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "foreground": "transparent",
-          "background": "#ffeb3b",
+          "background": "#CBEB3B",
           "background_templates": [
             "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}",
             "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
             "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
           ],
-          "template": "{{if .Error}}{{else}}{{.Percentage}}{{if eq \"Charging\" .State.String}}{{if lt .Percentage 21}}{{else if lt .Percentage 35}}{{else if lt .Percentage 49}}{{else if lt .Percentage 63}}{{else if lt .Percentage 77}}{{else if lt .Percentage 92}}{{else}}{{end}}{{else if eq \"Discharging\" .State.String}}{{if lt .Percentage 5}}{{else if lt .Percentage 14}}{{else if lt .Percentage 23}}{{else if lt .Percentage 32}}{{else if lt .Percentage 41}}{{else if lt .Percentage 50}}{{else if lt .Percentage 59}}{{else if lt .Percentage 68}}{{else if lt .Percentage 77}}{{else if lt .Percentage 86}}{{else if lt .Percentage 95}}{{else}}{{end}}{{else if eq \"Full\" .State.String}}{{end}}{{end}}",
+          "template": "{{if .Error}}{{else}}{{.Percentage}}{{if eq \"Charging\" .State.String}}{{if lt .Percentage 21}}{{else if lt .Percentage 35}}{{else if lt .Percentage 49}}{{else if lt .Percentage 63}}{{else if lt .Percentage 77}}{{else if lt .Percentage 92}}{{else}}{{end}}{{else if eq \"Discharging\" .State.String}}{{if lt .Percentage 5}}{{else if lt .Percentage 14}}{{else if lt .Percentage 23}}{{else if lt .Percentage 32}}{{else if lt .Percentage 41}}{{else if lt .Percentage 50}}{{else if lt .Percentage 59}}{{else if lt .Percentage 68}}{{else if lt .Percentage 77}}{{else if lt .Percentage 86}}{{else if lt .Percentage 95}}{{else}}{{end}}{{else if eq \"Full\" .State.String}}{{else}}{{end}}{{end}}",
           "properties": {
             "discharging_icon": "\uF58C",
             "charging_icon": "\uF58F",
