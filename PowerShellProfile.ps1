@@ -224,6 +224,24 @@ function Update-LLVM-PostProcess {
     Pop-Location
 }
 
+function Update-Affinity-PostProcess {
+    Push-Location "C:\Program Files\Affinity"
+
+    Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | ? { $_.Count -ge 3 } | Select-Object -Property Name | 
+        % { 
+            New-Item Common\$($_.Name) -Force
+            Copy-Item Photo\$($_.Name) Common\$($_.Name) -Force
+            Remove-Item Photo\$($_.Name)
+            New-Item -Type HardLink -Name Photo\$($_.Name) -Value Common\$($_.Name)
+            Remove-Item Publisher\$($_.Name)
+            New-Item -Type HardLink -Name Publisher\$($_.Name) -Value Common\$($_.Name)
+            Remove-Item Designer\$($_.Name)
+            New-Item -Type HardLink -Name Designer\$($_.Name) -Value Common\$($_.Name)
+        }
+
+    Pop-Location
+}
+
 function Uninstall-BundledEdge {
     if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Groups -match "S-1-5-32-544") {
         # Unregister-ScheduledTask *Edge* -Confirm:$false
