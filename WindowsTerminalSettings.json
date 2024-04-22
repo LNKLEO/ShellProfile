@@ -1,0 +1,135 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://raw.githubusercontent.com/microsoft/terminal/main/doc/cascadia/profiles.schema.json",
+    "actions": 
+    [
+        {
+            "command": 
+            {
+                "action": "copy",
+                "singleLine": false
+            },
+            "id": "User.copy.644BA8F2",
+            "keys": "ctrl+c"
+        },
+        {
+            "command": "paste",
+            "id": "User.paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "command": "find",
+            "id": "User.find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "id": "User.splitPane.E4E96BCF",
+            "keys": "alt+shift+d"
+        }
+    ],
+    "alwaysShowNotificationIcon": true,
+    "copyFormatting": "all",
+    "copyOnSelect": true,
+    "defaultProfile": "{f116f2a6-4a92-41bd-8a12-0118919474cf}",
+    "focusFollowMouse": true,
+    "initialCols": 144,
+    "initialRows": 48,
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "autoMarkPrompts": true,
+            "backgroundImage": "desktopWallpaper",
+            "backgroundImageOpacity": 0.0,
+            "bellStyle": "all",
+            "closeOnExit": "never",
+            "colorScheme": "CGA",
+            "cursorShape": "filledBox",
+            "experimental.repositionCursorWithMouse": true,
+            "experimental.rightClickContextMenu": true,
+            "font": 
+            {
+                "face": "Maple Nerd Light",
+                "features": 
+                {
+                    "zero": 1
+                }
+            },
+            "historySize": 2147483647,
+            "intenseTextStyle": "all",
+            "opacity": 50,
+            "padding": "2",
+            "scrollbarState": "always",
+            "showMarksOnScrollbar": true,
+            "useAcrylic": true
+        },
+        "list": 
+        [
+            {
+                "altGrAliasing": true,
+                "antialiasingMode": "grayscale",
+                "commandline": "C:\\PowerShell\\pwsh.exe",
+                "guid": "{f116f2a6-4a92-41bd-8a12-0118919474cf}",
+                "hidden": false,
+                "icon": "C:\\PowerShell\\pwsh.exe",
+                "name": "PowerShell Nightly",
+                "snapOnInput": true,
+                "startingDirectory": "%USERPROFILE%"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Command Prompt"
+            },
+            {
+                "guid": "{a5a97cb8-8961-5535-816d-772efe0c6a3f}",
+                "hidden": false,
+                "icon": "C:\\Program Files\\WindowsApps\\yuk7.archwsl_24.3.31.0_x64__35zwpb4sx6e50\\images\\Square44x44Logo.targetsize-24_altform-unplated.png",
+                "name": "Arch",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{46cbe8df-4249-557b-b2d0-4d3456885873}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022 [Preview]",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{412739cf-5799-5c4f-8c28-4932ea69248f}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022 [Preview]",
+                "source": "Windows.Terminal.VisualStudio"
+            }
+        ]
+    },
+    "schemes": [],
+    "tabWidthMode": "titleLength",
+    "theme": "system",
+    "themes": [],
+    "useAcrylicInTabRow": true
+}
