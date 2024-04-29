@@ -1,6 +1,6 @@
-Import-Module Posh-Git      
+Import-Module Posh-Git
 Import-Module Terminal-Icons
-Import-Module Z             
+Import-Module Z
 Import-Module PSFzf
 
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
@@ -27,11 +27,11 @@ if ($env:OS -eq "Windows_NT") {
 
     $architecture = $env:PROCESSOR_ARCHITECTURE.ToLower().Replace("amd", "x")
 
-    function Enter-Developer-Environment {  
+    function Enter-Developer-Environment {
         param (
             [string]
             $Target = $architecture,
-        
+
             [string]
             $Machine = $architecture
         )
@@ -40,7 +40,7 @@ if ($env:OS -eq "Windows_NT") {
             VsInstallPath   = "C:\Program Files\Microsoft Visual Studio\2022\Preview"
             DevCmdArguments = "-arch=$Target -host_arch=$Machine"
         }
-        
+
         Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
         $_INCLUDE = $env:INCLUDE
         $_LIB = $env:LIB
@@ -138,8 +138,8 @@ function Update-NodeJS {
         Write-Output "Updating Node.JS ${current} to ${latest}"
         Invoke-WebRequest "https://nodejs.org/download/nightly/${latest}/node-${latest}-x64.msi" -OutFile "${DL}\node-${latest}-x64.msi" -Resume
         msiexec /i "${DL}\node-${latest}-x64.msi" /passive
-    }    
-}    
+    }
+}
 
 function Update-Go {
     class GoVersion {
@@ -176,7 +176,7 @@ function Update-FFmpeg {
     if ($latest -gt $current) {
         Write-Output "Updating FFmpeg ${current} to ${latest}"
         Invoke-WebRequest "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z" -OutFile "${DL}\ffmpeg-${latest}-git-full.7z" -Resume
-        # Expand-Archive -Force "${DL}\ffmpeg-${latest}-git-full.7z" "C:\Program Files\FFmpeg\" 
+        # Expand-Archive -Force "${DL}\ffmpeg-${latest}-git-full.7z" "C:\Program Files\FFmpeg\"
     }
 }
 
@@ -227,8 +227,8 @@ function Update-LLVM-PostProcess {
 function Update-Affinity-PostProcess {
     Push-Location "C:\Program Files\Affinity"
 
-    Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | ? { $_.Count -ge 3 } | Select-Object -Property Name | 
-        % { 
+    Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | ? { $_.Count -ge 3 } | Select-Object -Property Name |
+        % {
             New-Item Common\$($_.Name) -Force
             Copy-Item Photo\$($_.Name) Common\$($_.Name) -Force
             Remove-Item Photo\$($_.Name)
@@ -279,7 +279,7 @@ function Start-AngryBirds {
         [string]
         $Edition
     )
-    
+
     $SupportedEditions = [Ordered]@{
         "Classic"    = "C:\Angry Birds\Angry Birds\AngryBirds.exe"
         "Seasons"    = "C:\Angry Birds\Angry Birds Seasons\AngryBirdsSeasons.exe"
@@ -292,7 +292,7 @@ function Start-AngryBirds {
     $Edition = $Edition.Trim();
 
     if ($SupportedEditions.Keys.Contains($Edition)) {
-        
+
     }
     else {
         Write-Output "SYNTAX"
@@ -304,7 +304,7 @@ function Start-AngryBirds {
             $K = $e.Key.PadRight(10)
             $V = $e.Value.Split('\')[2]
             Write-Output "        $K for $V"
-        } 
+        }
     }
 }
 
