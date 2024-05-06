@@ -103,7 +103,7 @@
             {
                 "guid": "{a5a97cb8-8961-5535-816d-772efe0c6a3f}",
                 "hidden": false,
-                "icon": "C:\\Program Files\\WindowsApps\\yuk7.archwsl_24.3.31.0_x64__35zwpb4sx6e50\\images\\Square44x44Logo.targetsize-24_altform-unplated.png",
+                "icon": "C:\\Program Files\\WindowsApps\\yuk7.archwsl_24.4.28.0_x64__35zwpb4sx6e50\\images\\Square44x44Logo.scale-200.png",
                 "name": "Arch",
                 "source": "Windows.Terminal.Wsl"
             },
