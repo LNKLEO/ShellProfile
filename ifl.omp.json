@@ -14,7 +14,7 @@
             "wsl_separator": " on "
           },
           "style": "diamond",
-          "template": " {{if .WSL}}{{else}}{{.Icon}}{{end}}",
+          "template": "{{if .WSL}}󰔰{{else}}{{end}}{{.Icon}}",
           "trailing_diamond": "",
           "type": "os"
         },
@@ -23,7 +23,7 @@
           "foreground": "#cfcf9f",
           "leading_diamond": "",
           "style": "diamond",
-          "template": "{{if .WSL}}󰔰{{else}}{{end}}󰍛{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[+{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[+{{div .SwapTotalMemory 1048576}}]MiB",
+          "template": "󰍛{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[+{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[+{{div .SwapTotalMemory 1048576}}]MiB",
           "type": "sysinfo"
         },
         {
