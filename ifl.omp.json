@@ -8,21 +8,8 @@
         {
           "foreground": "#1865f5",
           "properties": {
-            "alpine": "\uf300",
-            "arch": "\uf303",
-            "centos": "\uf304",
-            "debian": "\uf306",
-            "elementary": "\uf309",
-            "fedora": "\uf30a",
-            "gentoo": "\uf30d",
-            "linux": "\ue712",
-            "macos": "\uf179 ",
-            "manjaro": "\uf312",
-            "mint": "\uf30f",
-            "opensuse": "\uf314",
-            "raspbian": "\uf315",
-            "ubuntu": "\uf31b",
-            "windows": "",
+            "arch": "",
+            "windows": "󰍲",
             "wsl": "\ue712",
             "wsl_separator": " on "
           },
@@ -36,7 +23,7 @@
           "foreground": "#cfcf9f",
           "leading_diamond": "",
           "style": "diamond",
-          "template": "{{if .WSL}}WSL{{else}}{{end}}{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[+{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[+{{div .SwapTotalMemory 1048576}}]MiB",
+          "template": "{{if .WSL}}󰔰{{else}}{{end}}󰍛{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[+{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[+{{div .SwapTotalMemory 1048576}}]MiB",
           "type": "sysinfo"
         },
         {
@@ -48,7 +35,7 @@
             "time_format": "15:04:05@Jan02Mon"
           },
           "style": "diamond",
-          "template": "{{upper (.CurrentDate | date .Format)}}",
+          "template": "{{upper (.CurrentDate | date .Format)}}󱛡",
           "type": "time"
         }
       ],
@@ -64,7 +51,7 @@
           "trailing_diamond": "",
           "foreground": "#193549",
           "background": "#7fffff",
-          "template": ".NET {{upper .Full}}"
+          "template": ".NET {{upper .Full}}󰪮"
         },
         {
           "type": "rust",
@@ -91,7 +78,7 @@
           "trailing_diamond": "",
           "foreground": "#193549",
           "background": "#7FD5EA",
-          "template": "Go {{upper .Full}}"
+          "template": "Go {{upper .Full}}󰟓"
         }
       ],
       "type": "prompt"
@@ -115,7 +102,7 @@
           },
           "leading_diamond": "",
           "style": "diamond",
-          "template": "{{.PromptCount}}@{{regexReplaceAll \" \" .FormattedMs \"\"}}",
+          "template": "󰦖{{.PromptCount}}@{{regexReplaceAll \" \" .FormattedMs \"\"}}",
           "type": "executiontime"
         },
         {
@@ -187,7 +174,7 @@
           "leading_diamond": "",
           "foreground": "#3c000e",
           "background": "#c386f1",
-          "template": "{{if .SSHSession}}{{else}}{{end}}{{.UserName}}@{{.HostName}}"
+          "template": "{{if .SSHSession}}󰀑{{else}}󰀄{{end}}{{.UserName}}@{{.HostName}}"
         },
         {
           "foreground": "#000000",
@@ -209,7 +196,7 @@
             "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
           ],
           "trailing_diamond": "",
-          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>ﲵ{{end}}</>",
+          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>󰞷{{end}}</>",
           "properties": {
             "always_enabled": true
           }
@@ -234,7 +221,7 @@
             "LinkSpeedUnit": "A"
           },
           "IconAsAT": true,
-          "template": "{{if eq .Status \"Connected\"}}{{.Networks}}{{else}}{{end}}"
+          "template": "{{if eq .Status \"Connected\"}}{{.Networks}}{{else}}󰪎{{end}}"
         },
         {
           "type": "battery",
@@ -248,11 +235,8 @@
             "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
             "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
           ],
-          "template": "{{if .Error}}{{else}}{{.Percentage}}%{{if eq \"Charging\" .State.String}}{{if lt .Percentage 20}}{{else if lt .Percentage 30}}{{else if lt .Percentage 45}}{{else if lt .Percentage 60}}{{else if lt .Percentage 75}}{{else if lt .Percentage 90}}{{else if lt .Percentage 99}}{{else}}{{end}}{{else if eq \"Discharging\" .State.String}}{{if lt .Percentage 9}}{{else if lt .Percentage 18}}{{else if lt .Percentage 27}}{{else if lt .Percentage 36}}{{else if lt .Percentage 45}}{{else if lt .Percentage 54}}{{else if lt .Percentage 63}}{{else if lt .Percentage 72}}{{else if lt .Percentage 80}}{{else if lt .Percentage 88}}{{else if lt .Percentage 94}}{{else}}{{end}}{{else if eq \"Full\" .State.String}}{{else if eq \"Unknown\" .State.String}}{{else}}{{end}}{{end}}",
+          "template": "{{if .Error}}󰂃{{else}}{{.Percentage}}%{{if eq \"Charging\" .State.String}}{{if lt .Percentage 21}}󰂆{{else if lt .Percentage 33}}󰂇{{else if lt .Percentage 45}}󰂈{{else if lt .Percentage 57}}󰂉{{else if lt .Percentage 69}}󰂊{{else if lt .Percentage 81}}󰂋{{else if lt .Percentage 93}}󰂅{{else}}󰂄{{end}}{{else if or (eq \"Discharging\" .State.String) (eq \"Full\" .State.String)}}{{if lt .Percentage 21}}󰂎{{else if lt .Percentage 29}}󰁺{{else if lt .Percentage 37}}󰁻{{else if lt .Percentage 45}}󰁼{{else if lt .Percentage 53}}󰁽{{else if lt .Percentage 61}}󰁾{{else if lt .Percentage 69}}󰁿{{else if lt .Percentage 77}}󰂀{{else if lt .Percentage 85}}󰂁{{else if lt .Percentage 93}}󰂂{{else}}󰁹{{end}}{{else if eq \"Unknown\" .State.String}}󰂑{{else}}󰂃{{end}}{{end}}",
           "properties": {
-            "discharging_icon": "\uF58C",
-            "charging_icon": "\uF58F",
-            "charged_icon": "\uF584",
             "display_error": true
           }
         }
