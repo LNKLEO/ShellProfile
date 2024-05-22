@@ -6,6 +6,99 @@
       "newline": true,
       "segments": [
         {
+          "foreground": "#0077c2",
+          "style": "plain",
+          "template": "╭─",
+          "type": "text"
+        },
+        {
+          "background": "#2343e2",
+          "foreground": "#30cc7d",
+          "properties": {
+            "style": "roundrock",
+            "always_enabled": true
+          },
+          "leading_diamond": "",
+          "style": "diamond",
+          "template": "󰦖{{.PromptCount}}@{{regexReplaceAll \" \" .FormattedMs \"\"}}",
+          "type": "executiontime"
+        },
+        {
+          "foreground": "#000000",
+          "background": "#91f2ff",
+          "style": "diamond",
+          "template": "<#2343e2,#91f2ff></>{{.Name}} {{upper .Version}}",
+          "type": "shell",
+          "properties": {
+            "mapped_shell_names": {
+              "pwsh": "PowerShell"
+            }
+          }
+        },
+        {
+          "background": "#cfee45",
+          "foreground": "#000000",
+          "leading_diamond": "<#91f2ff,#cfee45></>",
+          "properties": {
+            "style": "full"
+          },
+          "style": "diamond",
+          "template": "{{.Path}}",
+          "trailing_diamond": "",
+          "type": "path"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "right",
+      "segments": [
+        {
+          "background": "#addb67",
+          "foreground": "#193549",
+          "leading_diamond": "",
+          "style": "diamond",
+          "trailing_diamond": "",
+          "background_templates": [
+            "{{if or (.Working.Changed) (.Staging.Changed)}}#ffeb3b{{end}}",
+            "{{if and (gt .Ahead 0) (gt .Behind 0)}}#f78c6c{{end}}",
+            "{{if gt .Ahead 0}}#21c7a8{{end}}",
+            "{{if gt .Behind 0}}#c792ea{{end}}"
+          ],
+          "template": "{{regexReplaceAll \" \" .BranchStatus \"\"}}{{if .Working.Changed}}|{{regexReplaceAll \" \" .Working.String \"\"}}{{end}}{{if .Staging.Changed}}|{{regexReplaceAll \" \" .Staging.String \"\"}}{{end}}{{if gt .StashCount 0}}|{{.StashCount}}{{end}}{{.Ref}}@{{regexReplaceAll \".*/\" .RepoName \"\"}}{{if gt .WorktreeCount 0}}{{.WorktreeCount}}{{end}}{{if eq .UpstreamIcon \"\"}}{{else}}{{.UpstreamIcon}}{{end}}",
+          "properties": {
+            "branch_icon": "",
+            "git_icon": "",
+            "github_icon": "",
+            "azure_devops_icon": "ﴃ",
+            "branch_ahead_icon": "",
+            "branch_behind_icon": "",
+            "branch_gone_icon": "≢",
+            "branch_identical_icon": "≡",
+            "tag_icon": "",
+            "commit_icon": "",
+            "merge_icon": "",
+            "fetch_status": true,
+            "fetch_stash_count": true,
+            "fetch_upstream_icon": true,
+            "fetch_worktree_count": true
+          },
+          "type": "git"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "#0077c2",
+          "style": "plain",
+          "template": "│",
+          "type": "text"
+        },
+        {
           "foreground": "#1865f5",
           "properties": {
             "arch": "",
@@ -14,7 +107,7 @@
             "wsl_separator": " on "
           },
           "style": "diamond",
-          "template": "{{if .WSL}}󰔰{{else}}{{end}}{{.Icon}}",
+          "template": "{{.Icon}}",
           "trailing_diamond": "",
           "type": "os"
         },
@@ -90,81 +183,6 @@
         {
           "foreground": "#0077c2",
           "style": "plain",
-          "template": "╭─",
-          "type": "text"
-        },
-        {
-          "background": "#2343e2",
-          "foreground": "#30cc7d",
-          "properties": {
-            "style": "roundrock",
-            "always_enabled": true
-          },
-          "leading_diamond": "",
-          "style": "diamond",
-          "template": "󰦖{{.PromptCount}}@{{regexReplaceAll \" \" .FormattedMs \"\"}}",
-          "type": "executiontime"
-        },
-        {
-          "background": "#f8677b",
-          "foreground": "#000000",
-          "leading_diamond": "<#2343e2,#f8677b></>",
-          "properties": {
-            "style": "full"
-          },
-          "style": "diamond",
-          "template": "{{.Path}}",
-          "trailing_diamond": "",
-          "type": "path"
-        }
-      ],
-      "type": "prompt"
-    },
-    {
-      "alignment": "right",
-      "segments": [
-        {
-          "background": "#addb67",
-          "foreground": "#193549",
-          "leading_diamond": "",
-          "style": "diamond",
-          "trailing_diamond": "",
-          "background_templates": [
-            "{{if or (.Working.Changed) (.Staging.Changed)}}#ffeb3b{{end}}",
-            "{{if and (gt .Ahead 0) (gt .Behind 0)}}#f78c6c{{end}}",
-            "{{if gt .Ahead 0}}#21c7a8{{end}}",
-            "{{if gt .Behind 0}}#c792ea{{end}}"
-          ],
-          "template": "{{regexReplaceAll \" \" .BranchStatus \"\"}}{{if .Working.Changed}}|{{regexReplaceAll \" \" .Working.String \"\"}}{{end}}{{if .Staging.Changed}}|{{regexReplaceAll \" \" .Staging.String \"\"}}{{end}}{{if gt .StashCount 0}}|{{.StashCount}}{{end}}{{.Ref}}@{{regexReplaceAll \".*/\" .RepoName \"\"}}{{if gt .WorktreeCount 0}}{{.WorktreeCount}}{{end}}{{if eq .UpstreamIcon \"\"}}{{else}}{{.UpstreamIcon}}{{end}}",
-          "properties": {
-            "branch_icon": "",
-            "git_icon": "",
-            "github_icon": "",
-            "azure_devops_icon": "ﴃ",
-            "branch_ahead_icon": "",
-            "branch_behind_icon": "",
-            "branch_gone_icon": "≢",
-            "branch_identical_icon": "≡",
-            "tag_icon": "",
-            "commit_icon": "",
-            "merge_icon": "",
-            "fetch_status": true,
-            "fetch_stash_count": true,
-            "fetch_upstream_icon": true,
-            "fetch_worktree_count": true
-          },
-          "type": "git"
-        }
-      ],
-      "type": "prompt"
-    },
-    {
-      "alignment": "left",
-      "newline": true,
-      "segments": [
-        {
-          "foreground": "#0077c2",
-          "style": "plain",
           "template": "╰─",
           "type": "text"
         },
@@ -172,21 +190,10 @@
           "type": "session",
           "style": "diamond",
           "leading_diamond": "",
+          "trailing_diamond": "",
           "foreground": "#3c000e",
-          "background": "#c386f1",
-          "template": "{{if .SSHSession}}󰀑{{else}}󰀄{{end}}{{.UserName}}@{{.HostName}}"
-        },
-        {
-          "foreground": "#000000",
-          "background": "#91f2ff",
-          "style": "diamond",
-          "template": "<#c386f1,#91f2ff></>{{.Name}} {{upper .Version}}",
-          "type": "shell",
-          "properties": {
-            "mapped_shell_names": {
-              "pwsh": "PowerShell"
-            }
-          }
+          "background": "#c3f6f1",
+          "template": "{{if .SSHSession}}󰀑{{else}}󰀄{{end}}{{.UserName}}@{{.HostName}}{{if .WSL}}[@WSL]{{else}}{{end}}"
         },
         {
           "type": "exit",
@@ -196,7 +203,7 @@
             "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
           ],
           "trailing_diamond": "",
-          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>󰞷{{end}}</>",
+          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>󰞷{{end}}</>",
           "properties": {
             "always_enabled": true
           }
