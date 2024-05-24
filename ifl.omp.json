@@ -31,7 +31,8 @@
           "type": "shell",
           "properties": {
             "mapped_shell_names": {
-              "pwsh": "PowerShell"
+              "pwsh": "PowerShell",
+              "zsh": "Z shell"
             }
           }
         },
