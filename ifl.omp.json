@@ -54,6 +54,42 @@
       "alignment": "right",
       "segments": [
         {
+          "type": "dotnet",
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "foreground": "#193549",
+          "background": "#7fffff",
+          "template": ".NET {{upper .Full}}󰪮"
+        },
+        {
+          "type": "rust",
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "foreground": "#193549",
+          "background": "#99908a",
+          "template": "Rust {{upper .Full}}-{{(split \" \" .BuildMetadata)._0}}"
+        },
+        {
+          "type": "python",
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "foreground": "#193549",
+          "background": "#99908a",
+          "template": "Python {{upper .Full}}"
+        },
+        {
+          "type": "go",
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "foreground": "#193549",
+          "background": "#7FD5EA",
+          "template": "Go {{upper .Full}}󰟓"
+        },
+        {
           "background": "#addb67",
           "foreground": "#193549",
           "leading_diamond": "",
@@ -114,7 +150,7 @@
         {
           "background": "#8f43f3",
           "foreground": "#cfcf9f",
-          "leading_diamond": "",
+          "leading_diamond": "<#8f43f3,transparent></>",
           "style": "diamond",
           "template": "󰍛{{regexReplaceAll \"\\\\([^\\\\)]*\\\\)\" (regexFind \"(Microsoft|Intel|AMD).*\" (trim (split \"@\" (index .CPU 0).ModelName)._0)) \"\"}}@{{(index .CPU 0).Mhz}}Mhz|{{(div (sub .PhysicalTotalMemory .PhysicalAvailableMemory) 1048576.0)}}[+{{(div (sub .SwapTotalMemory .SwapFreeMemory) 1048576)}}]/{{(div .PhysicalTotalMemory 1048576)}}[+{{div .SwapTotalMemory 1048576}}]MiB",
           "type": "sysinfo"
@@ -130,83 +166,6 @@
           "style": "diamond",
           "template": "{{upper (.CurrentDate | date .Format)}}󱛡",
           "type": "time"
-        }
-      ],
-      "type": "prompt"
-    },
-    {
-      "alignment": "right",
-      "segments": [
-        {
-          "type": "dotnet",
-          "style": "diamond",
-          "leading_diamond": "",
-          "trailing_diamond": "",
-          "foreground": "#193549",
-          "background": "#7fffff",
-          "template": ".NET {{upper .Full}}󰪮"
-        },
-        {
-          "type": "rust",
-          "style": "diamond",
-          "leading_diamond": "",
-          "trailing_diamond": "",
-          "foreground": "#193549",
-          "background": "#99908a",
-          "template": "Rust {{upper .Full}}-{{(split \" \" .BuildMetadata)._0}}"
-        },
-        {
-          "type": "python",
-          "style": "diamond",
-          "leading_diamond": "",
-          "trailing_diamond": "",
-          "foreground": "#193549",
-          "background": "#99908a",
-          "template": "Python {{upper .Full}}"
-        },
-        {
-          "type": "go",
-          "style": "diamond",
-          "leading_diamond": "",
-          "trailing_diamond": "",
-          "foreground": "#193549",
-          "background": "#7FD5EA",
-          "template": "Go {{upper .Full}}󰟓"
-        }
-      ],
-      "type": "prompt"
-    },
-    {
-      "alignment": "left",
-      "newline": true,
-      "segments": [
-        {
-          "foreground": "#0077c2",
-          "style": "plain",
-          "template": "╰─",
-          "type": "text"
-        },
-        {
-          "type": "session",
-          "style": "diamond",
-          "leading_diamond": "",
-          "trailing_diamond": "",
-          "foreground": "#3c000e",
-          "background": "#c3f6f1",
-          "template": "{{if .SSHSession}}󰀑{{else}}󰀄{{end}}{{.UserName}}@{{.HostName}}{{if .WSL}}[@WSL]{{else}}{{end}}"
-        },
-        {
-          "type": "exit",
-          "style": "diamond",
-          "foreground": "#91f2ff",
-          "background_templates": [
-            "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
-          ],
-          "trailing_diamond": "",
-          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>󰞷{{end}}</>",
-          "properties": {
-            "always_enabled": true
-          }
         }
       ],
       "type": "prompt"
@@ -248,7 +207,42 @@
           }
         }
       ],
-      "type": "rprompt"
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "#0077c2",
+          "style": "plain",
+          "template": "╰─",
+          "type": "text"
+        },
+        {
+          "type": "session",
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "foreground": "#3c000e",
+          "background": "#c3f6f1",
+          "template": "{{if .SSHSession}}󰀑{{else}}󰀄{{end}}{{.UserName}}@{{.HostName}}{{if .WSL}}[@WSL]{{else}}{{end}}"
+        },
+        {
+          "type": "exit",
+          "style": "diamond",
+          "foreground": "#91f2ff",
+          "background_templates": [
+            "{{if gt .Code 0}}#e91e1b{{else}}#16e11b{{end}}"
+          ],
+          "trailing_diamond": "",
+          "template": "{{if .Root}}<#ffff00>{{else}}<#0000ff>󰞷{{end}}</>",
+          "properties": {
+            "always_enabled": true
+          }
+        }
+      ],
+      "type": "prompt"
     }
   ],
   "console_title_template": "{{.Folder}}",
