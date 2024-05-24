@@ -104,19 +104,25 @@ function Get-BatteryReport {
 $DL = $(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
 
 function Update-PowerShell {
-    $latestbuild = $($(Invoke-WebRequest https://powershell.visualstudio.com/PowerShell/_build?definitionId=32).Content | Select-String "buildId=([0-9]{6})").Matches[0].Groups[1].Value
-    $latest = $($(Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=${latestbuild}") | Select-String "[0-9a-f]{40}").Matches[0].Value
-    $current = $($(Get-ItemProperty C:\PowerShell\pwsh.exe).VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
-    if ($latest -ne $current) {
-        $version = $(Get-ItemProperty C:\PowerShell\pwsh.exe).VersionInfo.FileVersion
-        Write-Output "Updating PowerShell ${version} ${current} to ${latest}"
-        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/${latestbuild}/artifacts?artifactName=build&api-version=7.1&%24format=zip" -OutFile "${DL}\PowerShell-${latest}.zip" -Resume
+    $buildid = $($(Invoke-WebRequest https://powershell.visualstudio.com/PowerShell/_build?definitionId=97).Content | Select-String '"id":([0-9]{6})[^/]*"sourceBranch":"refs/heads/master[^-]*"result":2').Matches[0].Groups[1].Value
+    
+    $latest = $($(Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/${buildid}/logs/91") | Select-String "PackageVersion: (.*)").Matches[0].Groups[1].Value    
+    $latestcommit = $($(Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=${buildid}") | Select-String "[0-9a-f]{40}").Matches[0].Value
+    $current = $PSVersionTable.PSVersion
+    $currentcommit = $($(Get-ItemProperty C:\Program Files\Powershell\7-preview\pwsh.exe).VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
+    if ($latestcommit -ne $currentcommit) {
+        if ($latest -eq $current) {
+            Write-Output "Updating PowerShell ${current} from commit ${currentcommit} to ${latestcommit}"
+        }
+        else {
+            Write-Output "Updating PowerShell ${current} to ${latest}"
+        }
+        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/${buildid}/artifacts?artifactName=artifacts&api-version=7.1&%24format=zip" -OutFile "${DL}\PowerShell-${latest}.zip" -Resume
         Expand-Archive -Force "${DL}\PowerShell-${latest}.zip" "${DL}\~PowerShell"
-        Expand-Archive -Force "${DL}\~PowerShell\build\build.zip" "${DL}\~PowerShell"
-        Remove-Item -Force -Recurse C:\PowerShell.old
-        Move-Item -Force C:\PowerShell\ C:\PowerShell.old
-        Move-Item -Force "${DL}\~PowerShell\publish" C:\PowerShell
+        Remove-Item -Force -Recurse "${DL}\PowerShell-${latest}.zip"
+        Copy-Item $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0] ~\Downloads\
         Remove-Item -Force -Recurse "${DL}\~PowerShell"
+        msiexec /i $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0] /passive
     }
 }
 
@@ -227,8 +233,8 @@ function Update-LLVM-PostProcess {
 function Update-Affinity-PostProcess {
     Push-Location "C:\Program Files\Affinity"
 
-    Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | ? { $_.Count -ge 3 } | Select-Object -Property Name |
-        % {
+    Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | Where-Object { $_.Count -ge 3 } | Select-Object -Property Name |
+        ForEach-Object {
             New-Item Common\$($_.Name) -Force
             Copy-Item Photo\$($_.Name) Common\$($_.Name) -Force
             Remove-Item Photo\$($_.Name)
@@ -306,9 +312,4 @@ function Start-AngryBirds {
             Write-Output "        $K for $V"
         }
     }
-}
-
-if (Test-Path -Path C:\PowerShell.old)
-{
-    Remove-Item -Force -Recurse C:\PowerShell.old
 }

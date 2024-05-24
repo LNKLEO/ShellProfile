@@ -52,7 +52,7 @@
         {
             "autoMarkPrompts": true,
             "backgroundImage": "desktopWallpaper",
-            "backgroundImageOpacity": 0.0,
+            "backgroundImageOpacity": 0,
             "bellStyle": "all",
             "closeOnExit": "never",
             "colorScheme": "CGA",
@@ -80,10 +80,10 @@
             {
                 "altGrAliasing": true,
                 "antialiasingMode": "grayscale",
-                "commandline": "C:\\PowerShell\\pwsh.exe",
+                "commandline": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe",
                 "guid": "{f116f2a6-4a92-41bd-8a12-0118919474cf}",
                 "hidden": false,
-                "icon": "C:\\PowerShell\\pwsh.exe",
+                "icon": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe",
                 "name": "PowerShell Nightly",
                 "snapOnInput": true,
                 "startingDirectory": "%USERPROFILE%"
