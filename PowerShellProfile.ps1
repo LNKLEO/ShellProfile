@@ -105,11 +105,10 @@ $DL = $(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Se
 
 function Update-PowerShell {
     $buildid = $($(Invoke-WebRequest https://powershell.visualstudio.com/PowerShell/_build?definitionId=97).Content | Select-String '"id":([0-9]{6})[^/]*"sourceBranch":"refs/heads/master[^-]*"result":2').Matches[0].Groups[1].Value
-    
-    $latest = $($(Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/${buildid}/logs/91") | Select-String "PackageVersion: (.*)").Matches[0].Groups[1].Value    
+    $latest = $($(Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/${buildid}/logs/83") | Select-String "PackageVersion: (.*[0-9])").Matches[0].Groups[1].Value
     $latestcommit = $($(Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=${buildid}") | Select-String "[0-9a-f]{40}").Matches[0].Value
     $current = $PSVersionTable.PSVersion
-    $currentcommit = $($(Get-ItemProperty C:\Program Files\Powershell\7-preview\pwsh.exe).VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
+    $currentcommit = $($(Get-ItemProperty "C:\Program Files\Powershell\7-preview\pwsh.exe").VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
     if ($latestcommit -ne $currentcommit) {
         if ($latest -eq $current) {
             Write-Output "Updating PowerShell ${current} from commit ${currentcommit} to ${latestcommit}"
@@ -122,7 +121,7 @@ function Update-PowerShell {
         Remove-Item -Force -Recurse "${DL}\PowerShell-${latest}.zip"
         Copy-Item $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0] ~\Downloads\
         Remove-Item -Force -Recurse "${DL}\~PowerShell"
-        msiexec /i $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0] /passive
+        sudo msiexec /i $(Get-ChildItem ~\Downloads\*win*x64*msi)[0] /qb
     }
 }
 
