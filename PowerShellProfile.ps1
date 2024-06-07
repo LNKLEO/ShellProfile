@@ -104,11 +104,11 @@ function Get-BatteryReport {
 $DL = $(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
 
 function Update-PowerShell {
-    $buildid = $($(Invoke-WebRequest https://powershell.visualstudio.com/PowerShell/_build?definitionId=97).Content | Select-String '"id":([0-9]{6})[^/]*"sourceBranch":"refs/heads/master[^-]*"result":2').Matches[0].Groups[1].Value
-    $latest = $($(Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid}/logs/83") | Select-String "PackageVersion: (.*[0-9])").Matches[0].Groups[1].Value
-    $latestcommit = $($(Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=$buildid}") | Select-String "[0-9a-f]{40}").Matches[0].Value
+    $buildid = $((Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build?definitionId=97").Content | Select-String '"id":([0-9]{6})[^/]*"sourceBranch":"refs/heads/master[^-]*"result":2').Matches[0].Groups[1].Value
+    $latest = $((Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid/logs/83") | Select-String "PackageVersion: (.*[0-9])").Matches[0].Groups[1].Value
+    $latestcommit = $((Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=$buildid}") | Select-String "[0-9a-f]{40}").Matches[0].Value
     $current = $PSVersionTable.PSVersion
-    $currentcommit = $($(Get-ItemProperty "C:\Program Files\Powershell\7-preview\pwsh.exe").VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
+    $currentcommit = $((Get-ItemProperty "C:\Program Files\Powershell\7-preview\pwsh.exe").VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
     if ($latestcommit -ne $currentcommit) {
         if ($latest -eq $current) {
             Write-Output "Updating PowerShell $current from commit $currentcommit to $latestcommit"
@@ -116,28 +116,29 @@ function Update-PowerShell {
         else {
             Write-Output "Updating PowerShell $current to $latest"
         }
-        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid}/artifacts?artifactName=artifacts&api-version=7.1&%24format=zip" -OutFile "$DL\PowerShell-$latest.zip" -Resume
+        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid/artifacts?artifactName=artifacts&api-version=7.1&%24format=zip" -OutFile "$DL\PowerShell-$latest.zip" -Resume
         Expand-Archive -Force "$DL\PowerShell-$latest.zip" "$DL\~PowerShell"
         Remove-Item -Force -Recurse "$DL\PowerShell-$latest.zip"
-        Copy-Item $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0] ~\Downloads\
+        $FILE = $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0]
+        Copy-Item $FILE ~\Downloads\
         Remove-Item -Force -Recurse "$DL\~PowerShell"
-        sudo msiexec /i $(Get-ChildItem ~\Downloads\*win*x64*msi)[0] /qb
+        sudo msiexec /i $DL\$(FILE.Name) /qb
     }
 }
 
 
 function Update-DotNETSDK {
-    $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
-    $current = $($(dotnet --list-sdks | Select-String "(\d{1,})\.\d{1,}\.\d{1,}(\-[a-z0-9\.]+)?").Matches |  Sort-Object { [Int]::Parse($_.Groups[1]) } -Descending)[0].Value
+    $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $((Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
+    $current = $((dotnet --list-sdks | Select-String "(\d{1,})\.\d{1,}\.\d{1,}(\-[a-z0-9\.]+)?").Matches |  Sort-Object { [Int]::Parse($_.Groups[1]) } -Descending)[0].Value
     if ($current -ne $latest) {
         Write-Output "Updating .NET SDK $current to $latest"
-        Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-installer-main\].*(https.*exe)").Matches[0].Groups[1].Value -OutFile "$DL\dotnet-sdk-$latest-x64.exe" -Resume
+        Invoke-WebRequest $((Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-installer-main\].*(https.*exe)").Matches[0].Groups[1].Value -OutFile "$DL\dotnet-sdk-$latest-x64.exe" -Resume
         &"$DL\dotnet-sdk-$latest-x64.exe" /passive
     }
 }
 
 function Update-NodeJS {
-    $latest = $($($($(Invoke-WebRequest https://nodejs.org/download/nightly/).Content | Select-String -AllMatches ">(v[^-]*-nightly([0-9]{8})[0-9a-z]*)/.*([0-9:]{5})").Matches | Sort-Object -Descending { $_.Groups[2], $_.Groups[3] }))[0].Groups[1].Value
+    $latest = $((((Invoke-WebRequest https://nodejs.org/download/nightly/).Content | Select-String -AllMatches ">(v[^-]*-nightly([0-9]{8})[0-9a-z]*)/.*([0-9:]{5})").Matches | Sort-Object -Descending { $_.Groups[2], $_.Groups[3] }))[0].Groups[1].Value
     $current = $(node -v)
     if ($latest -ne $current) {
         Write-Output "Updating Node.JS $current to $latest"
@@ -166,7 +167,7 @@ function Update-Go {
         }
     }
 
-    $latest = $($($(Invoke-WebRequest https://go.dev/dl).Content | Select-String  -AllMatches ">go(([0-9]*)`.([0-9]*)((`.|beta|rc)([0-9]*))?).windows-amd64.msi<").Matches | % { [GoVersion]$_ } | Sort-Object -Descending Major, Minor, Branch, Revision)[0].Version
+    $latest = $(((Invoke-WebRequest https://go.dev/dl).Content | Select-String  -AllMatches ">go(([0-9]*)`.([0-9]*)((`.|beta|rc)([0-9]*))?).windows-amd64.msi<").Matches | % { [GoVersion]$_ } | Sort-Object -Descending Major, Minor, Branch, Revision)[0].Version
     $current = $(go version | Select-String " go([^ ]*) ").Matches[0].Groups[1].Value
     if ($latest -ne $current) {
         Write-Output "Updating Go $current to $latest"
@@ -176,7 +177,7 @@ function Update-Go {
 }
 
 function Update-FFmpeg {
-    $latest = $($(Invoke-WebRequest -AllowInsecureRedirect https://www.gyan.dev/ffmpeg/builds).Content | Select-String "version: <span id=`"git-version`">(20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
+    $latest = $((Invoke-WebRequest -AllowInsecureRedirect https://www.gyan.dev/ffmpeg/builds).Content | Select-String "version: <span id=`"git-version`">(20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
     $current = $(ffmpeg -version | Select-String "ffmpeg version (20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
     if ($latest -gt $current) {
         Write-Output "Updating FFmpeg $current to $latest"
@@ -186,7 +187,7 @@ function Update-FFmpeg {
 }
 
 function Update-Kodi {
-    $latest = $($($(Invoke-WebRequest "https://mirrors.kodi.tv/nightlies/windows/win64/master/").Content | Select-String "KodiSetup-([0-9a-f-]*)-master-x64.exe.*([0-9]{4}.*[0-9]{2})").Matches)[0]
+    $latest = $(((Invoke-WebRequest "https://mirrors.kodi.tv/nightlies/windows/win64/master/").Content | Select-String "KodiSetup-([0-9a-f-]*)-master-x64.exe.*([0-9]{4}.*[0-9]{2})").Matches)[0]
     $latestversion = $latest.Groups[1].Value
     $latest = [DateTime]$latest.Groups[2].Value
     $current = $(Get-ItemProperty "C:\Program Files\Kodi\Kodi.exe").CreationTime
@@ -237,8 +238,8 @@ function Update-Affinity {
     $RemoteVersion = @{}
 
     $Products | % {
-        $CurrentVersion[$_] = $(Get-ItemProperty $($MainFilePath -f $_)).VersionInfo.ProductVersion
-        $RemoteVersion[$_] = $(Invoke-RestMethod $($CheckURL -f $_)).Version
+        $CurrentVersion[$_] = $(Get-ItemProperty $(MainFilePath -f $_)).VersionInfo.ProductVersion
+        $RemoteVersion[$_] = $(Invoke-RestMethod $(CheckURL -f $_)).Version
     }
 
     $Products | % {
@@ -248,20 +249,20 @@ function Update-Affinity {
     }
 
     $RemoteVersion.Keys | % {
-        Write-Output "Updating Affinity $_ $($CurrentVersion[$_]) to $($RemoteVersion[$_])"
+        Write-Output "Updating Affinity $_ $(CurrentVersion[$_]) to $(RemoteVersion[$_])"
     }
 
     $RemoteVersion.Keys | % -Parallel {
         $DL = $USING:DL
         $RemoteVersion = $USING:RemoteVersion
-        Invoke-WebRequest $("https://affin.co/{0}WinExeBeta" -f $_) -OutFile "$DL\Affinity$($_)2Beta-$($RemoteVersion[$_]).exe" -Resume
+        Invoke-WebRequest $("https://affin.co/{0}WinExeBeta" -f $_) -OutFile "$DL\Affinity$(_)2Beta-$(RemoteVersion[$_]).exe" -Resume
     }
 
     $RemoteVersion.Keys | % {
-        $FILE = "$DL\Affinity$($_)2Beta-$($RemoteVersion[$_])"
-        $BEG = $($(Format-Hex "$FILE.exe" -Count 0x80000).HexBytes | Join-String -Separator ' ' | Select-String "D0 CF 11 E0 A1 B1 1A E1").Matches[0].Captures[0].Index / 3
+        $FILE = "$DL\Affinity$(_)2Beta-$(RemoteVersion[$_])"
+        $BEG = $((Format-Hex "$FILE.exe" -Count 0x80000).HexBytes | Join-String -Separator ' ' | Select-String "D0 CF 11 E0 A1 B1 1A E1").Matches[0].Captures[0].Index / 3
         $OFFSET = $(Get-ItemPropertyValue "$FILE.exe" -Name Length) - 0xFFFF8 - $BEG % 16
-        $END = $($(Format-Hex "$FILE.exe" -Offset $OFFSET).HexBytes | Join-String -Separator ' ' | Select-String "00 00 00 00 00 00 00 00 4D 5A 90 00 03 00 00 00").Matches[0].Captures[0].Index / 3 + $OFFSET + 8
+        $END = $((Format-Hex "$FILE.exe" -Offset $OFFSET).HexBytes | Join-String -Separator ' ' | Select-String "00 00 00 00 00 00 00 00 4D 5A 90 00 03 00 00 00").Matches[0].Captures[0].Index / 3 + $OFFSET + 8
         $EXE = [System.IO.StreamReader]::new("$FILE.exe")
         $MSI = [System.IO.StreamWriter]::new("$FILE.msi")
         $EXE.BaseStream.Seek($BEG, [System.IO.SeekOrigin]::Begin)
@@ -272,9 +273,9 @@ function Update-Affinity {
     }
 
     $RemoteVersion.Keys | % {
-        sudo msiexec /i "$DL\Affinity$($_)2Beta-$($RemoteVersion[$_]).msi" /qb
+        sudo msiexec /i "$DL\Affinity$(_)2Beta-$(RemoteVersion[$_]).msi" /qb
         Waiting-MSI
-        Write-Output "Affinity$($_)2Beta-$($RemoteVersion[$_]) Installed"
+        Write-Output "Affinity$(_)2Beta-$(RemoteVersion[$_]) Installed"
     }
 }
 
