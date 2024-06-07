@@ -140,9 +140,9 @@ function Update-NodeJS {
     $latest = $($($($(Invoke-WebRequest https://nodejs.org/download/nightly/).Content | Select-String -AllMatches ">(v[^-]*-nightly([0-9]{8})[0-9a-z]*)/.*([0-9:]{5})").Matches | Sort-Object -Descending { $_.Groups[2], $_.Groups[3] }))[0].Groups[1].Value
     $current = $(node -v)
     if ($latest -ne $current) {
-        Write-Output "Updating Node.JS ${current} to ${latest}"
-        Invoke-WebRequest "https://nodejs.org/download/nightly/${latest}/node-${latest}-x64.msi" -OutFile "${DL}\node-${latest}-x64.msi" -Resume
-        msiexec /i "${DL}\node-${latest}-x64.msi" /passive
+        Write-Output "Updating Node.JS $current to $latest"
+        Invoke-WebRequest "https://nodejs.org/download/nightly/$latest/node-$latest-x64.msi" -OutFile "$DL\node-$latest-x64.msi" -Resume
+        msiexec /i "$DL\node-$latest-x64.msi" /passive
     }
 }
 
@@ -166,12 +166,12 @@ function Update-Go {
         }
     }
 
-    $latest = $($($(Invoke-WebRequest https://go.dev/dl).Content | Select-String  -AllMatches ">go(([0-9]*)`.([0-9]*)((`.|beta|rc)([0-9]*))?).windows-amd64.msi<").Matches | ForEach-Object { [GoVersion]$_ } | Sort-Object -Descending Major, Minor, Branch, Revision)[0].Version
+    $latest = $($($(Invoke-WebRequest https://go.dev/dl).Content | Select-String  -AllMatches ">go(([0-9]*)`.([0-9]*)((`.|beta|rc)([0-9]*))?).windows-amd64.msi<").Matches | % { [GoVersion]$_ } | Sort-Object -Descending Major, Minor, Branch, Revision)[0].Version
     $current = $(go version | Select-String " go([^ ]*) ").Matches[0].Groups[1].Value
     if ($latest -ne $current) {
-        Write-Output "Updating Go ${current} to ${latest}"
-        Invoke-WebRequest "https://go.dev/dl/go${latest}.windows-amd64.msi" -OutFile "${DL}\go${latest}.windows-amd64.msi" -Resume
-        msiexec /i "${DL}\go${latest}.windows-amd64.msi" /passive
+        Write-Output "Updating Go $current to $latest"
+        Invoke-WebRequest "https://go.dev/dl/go$latest.windows-amd64.msi" -OutFile "$DL\go$latest.windows-amd64.msi" -Resume
+        msiexec /i "$DL\go$latest.windows-amd64.msi" /passive
     }
 }
 
@@ -179,9 +179,9 @@ function Update-FFmpeg {
     $latest = $($(Invoke-WebRequest -AllowInsecureRedirect https://www.gyan.dev/ffmpeg/builds).Content | Select-String "version: <span id=`"git-version`">(20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
     $current = $(ffmpeg -version | Select-String "ffmpeg version (20[0-9]{2}-[0-9]{2}-[0-9]{2}-git-[0-9a-f]{10})").Matches[0].Groups[1].Value
     if ($latest -gt $current) {
-        Write-Output "Updating FFmpeg ${current} to ${latest}"
-        Invoke-WebRequest "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z" -OutFile "${DL}\ffmpeg-${latest}-git-full.7z" -Resume
-        # Expand-Archive -Force "${DL}\ffmpeg-${latest}-git-full.7z" "C:\Program Files\FFmpeg\"
+        Write-Output "Updating FFmpeg $current to $latest"
+        Invoke-WebRequest "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z" -OutFile "$DL\ffmpeg-$latest-git-full.7z" -Resume
+        # Expand-Archive -Force "$DL\ffmpeg-$latest-git-full.7z" "C:\Program Files\FFmpeg\"
     }
 }
 
@@ -191,9 +191,9 @@ function Update-Kodi {
     $latest = [DateTime]$latest.Groups[2].Value
     $current = $(Get-ItemProperty "C:\Program Files\Kodi\Kodi.exe").CreationTime
     if ($latest -gt $current) {
-        Write-Output "Updating Kodi to ${latestversion}"
-        Invoke-WebRequest "https://mirrors.kodi.tv/nightlies/windows/win64/master/KodiSetup-${latestversion}-master-x64.exe" -OutFile "${DL}\KodiSetup-${latestversion}-master-x64.exe" -Resume
-        &"${DL}\KodiSetup-${latestversion}-master-x64.exe"
+        Write-Output "Updating Kodi to $latestversion}"
+        Invoke-WebRequest "https://mirrors.kodi.tv/nightlies/windows/win64/master/KodiSetup-$latestversion}-master-x64.exe" -OutFile "$DL\KodiSetup-$latestversion}-master-x64.exe" -Resume
+        &"$DL\KodiSetup-$latestversion}-master-x64.exe"
     }
 }
 
@@ -315,14 +315,14 @@ function Uninstall-BundledEdge {
 
         # taskkill /f /im MicrosoftEdgeUpdate.exe
 
-        # Get-ChildItem "C:\Program Files (x86)\Microsoft\EdgeWebView\*\Installer" -Recurse | Foreach-Object {
+        # Get-ChildItem "C:\Program Files (x86)\Microsoft\EdgeWebView\*\Installer" -Recurse | % {
         #     Push-Location $_
         #     Copy-Item C:\SHELL\EDGEUNINSTALLER setup.exe
         #     ./setup.exe --uninstall --force-uninstall --system-level --msedgewebview
         #     Pop-Location
         # }
 
-        Get-ChildItem "C:\Program Files (x86)\Microsoft\Edge\*\Installer" -Recurse | Foreach-Object {
+        Get-ChildItem "C:\Program Files (x86)\Microsoft\Edge\*\Installer" -Recurse | % {
             Push-Location $_
             Copy-Item C:\SHELL\EDGEUNINSTALLER setup.exe
             ./setup.exe --uninstall --force-uninstall --system-level --msedge
