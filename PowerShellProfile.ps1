@@ -118,7 +118,7 @@ function Update-PowerShell {
         }
         Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid/artifacts?artifactName=artifacts&api-version=7.1&%24format=zip" -OutFile "$DL\PowerShell-$latest.zip" -Resume
         Expand-Archive -Force "$DL\PowerShell-$latest.zip" "$DL\~PowerShell"
-        Remove-Item -Force -Recurse "$DL\PowerShell-$latest.zip"
+        # Remove-Item -Force -Recurse "$DL\PowerShell-$latest.zip"
         $FILE = $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0]
         Copy-Item $FILE ~\Downloads\
         Remove-Item -Force -Recurse "$DL\~PowerShell"
