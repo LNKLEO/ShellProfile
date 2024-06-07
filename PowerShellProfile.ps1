@@ -229,20 +229,79 @@ function Update-LLVM-PostProcess {
     Pop-Location
 }
 
+function Update-Affinity {
+    $Products = ("Photo","Publisher","Designer")
+    $CheckURL = "https://go.seriflabs.com/WindowsUpdate{0}2BetaUnpackaged"
+    $MainFilePath = "C:\Program Files\Affinity\{0} 2 Beta\{0}.exe"
+    $CurrentVersion = @{}
+    $RemoteVersion = @{}
+
+    $Products | % {
+        $CurrentVersion[$_] = $(Get-ItemProperty $($MainFilePath -f $_)).VersionInfo.ProductVersion
+        $RemoteVersion[$_] = $(Invoke-RestMethod $($CheckURL -f $_)).Version
+    }
+
+    $Products | % {
+        if ($CurrentVersion[$_] -eq $RemoteVersion[$_]) {
+            $RemoteVersion.Remove($_)
+        }
+    }
+
+    $RemoteVersion.Keys | % {
+        Write-Output "Updating Affinity $_ $($CurrentVersion[$_]) to $($RemoteVersion[$_])"
+    }
+
+    $RemoteVersion.Keys | % -Parallel {
+        $DL = $USING:DL
+        $RemoteVersion = $USING:RemoteVersion
+        Invoke-WebRequest $("https://affin.co/{0}WinExeBeta" -f $_) -OutFile "$DL\Affinity$($_)2Beta-$($RemoteVersion[$_]).exe" -Resume
+    }
+
+    $RemoteVersion.Keys | % {
+        $FILE = "$DL\Affinity$($_)2Beta-$($RemoteVersion[$_])"
+        $BEG = $($(Format-Hex "$FILE.exe" -Count 0x80000).HexBytes | Join-String -Separator ' ' | Select-String "D0 CF 11 E0 A1 B1 1A E1").Matches[0].Captures[0].Index / 3
+        $OFFSET = $(Get-ItemPropertyValue "$FILE.exe" -Name Length) - 0xFFFF8 - $BEG % 16
+        $END = $($(Format-Hex "$FILE.exe" -Offset $OFFSET).HexBytes | Join-String -Separator ' ' | Select-String "00 00 00 00 00 00 00 00 4D 5A 90 00 03 00 00 00").Matches[0].Captures[0].Index / 3 + $OFFSET + 8
+        $EXE = [System.IO.StreamReader]::new("$FILE.exe")
+        $MSI = [System.IO.StreamWriter]::new("$FILE.msi")
+        $EXE.BaseStream.Seek($BEG, [System.IO.SeekOrigin]::Begin)
+        $EXE.BaseStream.CopyTo($MSI.BaseStream)
+        $MSI.BaseStream.SetLength($END - $BEG)
+        $EXE.Close()
+        $MSI.Close()
+    }
+
+    $RemoteVersion.Keys | % {
+        sudo msiexec /i "$DL\Affinity$($_)2Beta-$($RemoteVersion[$_]).msi" /qb
+        Waiting-MSI
+        Write-Output "Affinity$($_)2Beta-$($RemoteVersion[$_]) Installed"
+    }
+}
+
 function Update-Affinity-PostProcess {
     Push-Location "C:\Program Files\Affinity"
 
-    Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | Where-Object { $_.Count -ge 3 } | Select-Object -Property Name |
-        ForEach-Object {
-            New-Item Common\$($_.Name) -Force
-            Copy-Item Photo\$($_.Name) Common\$($_.Name) -Force
-            Remove-Item Photo\$($_.Name)
-            New-Item -Type HardLink -Name Photo\$($_.Name) -Value Common\$($_.Name)
-            Remove-Item Publisher\$($_.Name)
-            New-Item -Type HardLink -Name Publisher\$($_.Name) -Value Common\$($_.Name)
-            Remove-Item Designer\$($_.Name)
-            New-Item -Type HardLink -Name Designer\$($_.Name) -Value Common\$($_.Name)
+    @("Photo", "Publisher", "Designer") | % { 
+        if (-not $(Test-Path $_)) {
+            New-Item -Type Junction -Name $_ -Value "$PWD\$_ 2 Beta"
         }
+    }
+
+    $FILES = $(Get-ChildItem -Recurse -File | Group-Object { $_.FullName.Split("\", 5)[-1] } | Where-Object { $_.Count -ge 3 } | % { $_.Name })
+    $FILES | % {
+        $FILE = $_
+        New-Item Common\$FILE -Force
+        Move-Item Photo\$FILE Common\$FILE -Force
+        @("Publisher", "Designer") | % { 
+            Remove-Item $_\$FILE
+        }
+    }
+    @("Photo", "Publisher", "Designer") | % { 
+        $PRODUCT = $_
+        $FILES | % {
+            New-Item -Type HardLink -Name $PRODUCT\$_ -Value Common\$_
+        }
+    }
 
     Pop-Location
 }
@@ -311,4 +370,13 @@ function Start-AngryBirds {
             Write-Output "        $K for $V"
         }
     }
+}
+
+function Waiting-MSI {
+    do {
+        Start-Sleep 0.125
+    } while (
+        $(Get-Process msiexec -IncludeUserName -ErrorAction Ignore | Where-Object { $_.UserName -ne $null }).Count -lt 0 -or
+        $(Get-Process sudo -IncludeUserName -ErrorAction Ignore | Where-Object { $_.UserName -ne $null }).Count -lt 0
+    )
 }
