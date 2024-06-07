@@ -127,12 +127,12 @@ function Update-PowerShell {
 
 
 function Update-DotNETSDK {
-    $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
-    $current = $(dotnet --list-sdks | Select-String "[^ ]*").Matches | Select-Object -ExpandProperty Value
-    if (-not $current.Contains($latest)) {
-        Write-Output "Updating .NET SDK ${current} to ${latest}"
-        Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/installer/main/README.md).Content | Select-String "\[win-x64-installer-main\].*(https.*exe)").Matches[0].Groups[1].Value -OutFile "${DL}\dotnet-sdk-${latest}-x64.exe" -Resume
-        &"${DL}\dotnet-sdk-${latest}-x64.exe" /passive
+    $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
+    $current = $($(dotnet --list-sdks | Select-String "(\d{1,})\.\d{1,}\.\d{1,}(\-[a-z0-9\.]+)?").Matches |  Sort-Object { [Int]::Parse($_.Groups[1]) } -Descending)[0].Value
+    if ($current -ne $latest) {
+        Write-Output "Updating .NET SDK $current to $latest"
+        Invoke-WebRequest $($(Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-installer-main\].*(https.*exe)").Matches[0].Groups[1].Value -OutFile "$DL\dotnet-sdk-$latest-x64.exe" -Resume
+        &"$DL\dotnet-sdk-$latest-x64.exe" /passive
     }
 }
 
