@@ -104,9 +104,10 @@ function Get-BatteryReport {
 $DL = $(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
 
 function Update-PowerShell {
-    $buildid = $((Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build?definitionId=97").Content | Select-String '"id":([0-9]{6})[^/]*"sourceBranch":"refs/heads/master[^-]*"result":2').Matches[0].Groups[1].Value
-    $latest = $((Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid/logs/83") | Select-String "PackageVersion: (.*[0-9])").Matches[0].Groups[1].Value
-    $latestcommit = $((Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=$buildid}") | Select-String "[0-9a-f]{40}").Matches[0].Value
+    $build = $((Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build?definitionId=97").Content | Select-String '"id":([0-9]{6})[^/]*"sourceBranch":"refs/heads/master[^-]*"result":2').Matches[0].Groups[1].Value
+    $log = $($(Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=$build&view=logs").Content | Select-String -AllMatches "`"ec161491-f990-5215-209c-5fb381a7fcfb[^-]*Package and Test[^-]*`"logId`":([0-9]*)").Matches[0].Groups[1].Value
+    $latest = $((Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$build/logs/$log") | Select-String "PackageVersion: (.*[0-9])").Matches[0].Groups[1].Value
+    $latestcommit = $((Invoke-WebRequest "https://powershell.visualstudio.com/PowerShell/_build/results?buildId=$build}") | Select-String "[0-9a-f]{40}").Matches[0].Value
     $current = $PSVersionTable.PSVersion
     $currentcommit = $((Get-ItemProperty "C:\Program Files\Powershell\7-preview\pwsh.exe").VersionInfo.ProductVersion | Select-String "[0-9a-f]{40}").Matches[0].Value
     if ($latestcommit -ne $currentcommit) {
@@ -116,19 +117,20 @@ function Update-PowerShell {
         else {
             Write-Output "Updating PowerShell $current to $latest"
         }
-        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$buildid/artifacts?artifactName=artifacts&api-version=7.1&%24format=zip" -OutFile "$DL\PowerShell-$latest.zip" -Resume
+        Invoke-WebRequest "https://powershell.visualstudio.com/2972bb5c-f20c-4a60-8bd9-00ffe9987edc/_apis/build/builds/$build/artifacts?artifactName=artifacts&api-version=7.1&%24format=zip" -OutFile "$DL\PowerShell-$latest.zip" -Resume
         Expand-Archive -Force "$DL\PowerShell-$latest.zip" "$DL\~PowerShell"
         # Remove-Item -Force -Recurse "$DL\PowerShell-$latest.zip"
-        $FILE = $(Get-ChildItem ~\Downloads\~PowerShell\artifacts\*win*x64*msi)[0]
-        Copy-Item $FILE ~\Downloads\
+        $FILE = $(Get-ChildItem $DL\~PowerShell\artifacts\*win*x64*msi)[0].Name
+        Copy-Item $DL\~PowerShell\artifacts\$FILE $DL
         Remove-Item -Force -Recurse "$DL\~PowerShell"
-        sudo msiexec /i $DL\$(FILE.Name) /qb
+        sudo msiexec /i $DL\$FILE /qb
     }
 }
 
 
 function Update-DotNETSDK {
-    $latest = $([System.Text.Encoding]::UTF8.GetString($(Invoke-WebRequest $((Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-version-main\].*(https.*txt)").Matches[0].Groups[1].Value).Content) | Select-String "installer_version=\`"(.*)\`"").Matches[0].Groups[1].Value
+    $badge = $((Invoke-WebRequest https://raw.githubusercontent.com/dotnet/sdk/main/documentation/package-table.md).Content | Select-String "\[win-x64-badge-main\].*(https:.*svg([\?&].*)*)").Matches[0].Groups[1].Value
+    $latest = $((Invoke-WebRequest $badge) | Select-String ">(([0-9]+\.){2}.*)<").Matches[0].Groups[1].Value
     $current = $((dotnet --list-sdks | Select-String "(\d{1,})\.\d{1,}\.\d{1,}(\-[a-z0-9\.]+)?").Matches |  Sort-Object { [Int]::Parse($_.Groups[1]) } -Descending)[0].Value
     if ($current -ne $latest) {
         Write-Output "Updating .NET SDK $current to $latest"
@@ -238,8 +240,8 @@ function Update-Affinity {
     $RemoteVersion = @{}
 
     $Products | % {
-        $CurrentVersion[$_] = $(Get-ItemProperty $(MainFilePath -f $_)).VersionInfo.ProductVersion
-        $RemoteVersion[$_] = $(Invoke-RestMethod $(CheckURL -f $_)).Version
+        $CurrentVersion[$_] = $(Get-ItemProperty $($MainFilePath -f $_)).VersionInfo.ProductVersion
+        $RemoteVersion[$_] = $(Invoke-RestMethod $($CheckURL -f $_)).Version
     }
 
     $Products | % {
