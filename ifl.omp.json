@@ -102,19 +102,19 @@
             "{{if gt .Ahead 0}}#21c7a8{{end}}",
             "{{if gt .Behind 0}}#c792ea{{end}}"
           ],
-          "template": "{{regexReplaceAll \" \" .BranchStatus \"\"}}{{if .Working.Changed}}|{{regexReplaceAll \" \" .Working.String \"\"}}{{end}}{{if .Staging.Changed}}|{{regexReplaceAll \" \" .Staging.String \"\"}}{{end}}{{if gt .StashCount 0}}|{{.StashCount}}{{end}}{{.Ref}}@{{regexReplaceAll \".*/\" .RepoName \"\"}}{{if gt .WorktreeCount 0}}{{.WorktreeCount}}{{end}}{{if eq .UpstreamIcon \"\"}}{{else}}{{.UpstreamIcon}}{{end}}",
+          "template": "{{.BranchStatus}}{{if .Working.Changed}}|{{.Working}}{{end}}{{if .Staging.Changed}}|{{.Staging}}{{end}}{{if gt .StashCount 0}}|{{.StashCount}}{{end}}{{if .Commit.Refs.Tags}}{{join \"\" .Commit.Refs.Tags}}{{end}}{{if .Detached}}{{.BranchStatus}}({{.ShortHash}}){{else}}{{.Upstream}}{{end}}@{{.RepoName}}{{if gt .WorktreeCount 0}}{{.WorktreeCount}}{{end}}{{if .UpstreamIcon}}{{.UpstreamIcon}}{{else}}  {{end}}",
           "properties": {
-            "branch_icon": "",
-            "git_icon": "",
-            "github_icon": "",
-            "azure_devops_icon": "ﴃ",
-            "branch_ahead_icon": "",
-            "branch_behind_icon": "",
-            "branch_gone_icon": "≢",
-            "branch_identical_icon": "≡",
+            "branch_icon": "",
+            "git_icon": "",
+            "github_icon": "",
+            "azure_devops_icon": "",
+            "branch_ahead_icon": "",
+            "branch_behind_icon": "",
+            "branch_gone_icon": "",
+            "branch_identical_icon": "",
             "tag_icon": "",
             "commit_icon": "",
-            "merge_icon": "",
+            "merge_icon": "",
             "fetch_status": true,
             "fetch_stash_count": true,
             "fetch_upstream_icon": true,
@@ -251,7 +251,7 @@
           "foreground": "#193549",
           "background": "#ffeb3b",
           "trailing_diamond": "",
-          "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ if .Name }}{{ .Name }}{{ if .Version }}@{{ .Version }}{{ end }}{{ end }}{{ upper .Type }}@{{ upper .Target }}{{ end }}"
+          "template": "{{if .Error}}{{.Error}}{{else}}{{if .Name}}{{.Name}}{{if .Version}}@{{.Version}}{{end}}{{end}}{{upper .Type}}@{{upper .Target}}{{end}}"
         },
         {
           "type": "exit",
