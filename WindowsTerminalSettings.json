@@ -29,6 +29,10 @@
             "id": "User.find"
         }
     ],
+    "aiConfig": 
+    {
+        "activeProvider": "githubCopilot"
+    },
     "alwaysShowNotificationIcon": true,
     "copyFormatting": "all",
     "copyOnSelect": true,
@@ -88,7 +92,7 @@
             "padding": "2",
             "pathTranslationStyle": "wsl",
             "rightClickContextMenu": true,
-            "scrollbarState": "hidden",
+            "scrollbarState": "visible",
             "showMarksOnScrollbar": true,
             "useAcrylic": true
         },
@@ -129,6 +133,18 @@
                 "hidden": false,
                 "name": "Azure Cloud Shell",
                 "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{056ddc15-bdb0-5c16-a6c7-7b0ba687075d}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022 [Preview]",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{6d6d6248-1e5b-5c91-b79b-4536b2d90622}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022 [Preview]",
+                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },

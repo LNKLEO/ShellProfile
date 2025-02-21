@@ -3,6 +3,10 @@ Import-Module Terminal-Icons
 Import-Module Z
 Import-Module PSFzf
 
+Get-ChildItem C:/Shell/autocomplete -Filter "*.ps1" | % {
+    Import-Module $_
+}
+
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
 
@@ -80,7 +84,7 @@ if ($env:OS -eq "Windows_NT") {
             "󰄾 Using bundled clang toolchain"
         }
 
-        if (Test-Path "C:\??\git.exe") {
+        if (Test-Path "C:\MinGit\cmd\git.exe") {
             "󰄾 Using standalone git"
             # $env:Path =
         }
@@ -88,7 +92,7 @@ if ($env:OS -eq "Windows_NT") {
             "󰄾 Using bundled git"
         }
 
-        if (Test-Path "C:\??\cmake.exe") {
+        if (Test-Path "C:\Program Files\CMake\bin\cmake.exe") {
             "󰄾 Using standalone CMake"
             # $env:Path =
         }
@@ -96,13 +100,13 @@ if ($env:OS -eq "Windows_NT") {
             "󰄾 Using bundled CMake"
         }
 
-        if (Test-Path "C:\??\ninja.exe") {
-            "󰄾 Using standalone Ninja"
-            # $env:Path =
-        }
-        else {
-            "󰄾 Using bundled Ninja"
-        }
+        # if (Test-Path "C:\??\ninja.exe") {
+        #     "󰄾 Using standalone Ninja"
+        #     # $env:Path =
+        # }
+        # else {
+        #     "󰄾 Using bundled Ninja"
+        # }
 
         ""
         "Checking tools..."
@@ -111,14 +115,15 @@ if ($env:OS -eq "Windows_NT") {
         "󰄾 $($(cl 2>&1)[0]) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command cl).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 Microsoft (R) Visual C# Compiler version $(csc /version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command csc).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 Microsoft (R) Visual C# Interactive Compiler version $(csi /version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command csi).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
-        "󰄾 $(fsc --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command fsc).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
-        "󰄾 $(fsi --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command fsi).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
+        # "󰄾 $(fsc --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command fsc).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
+        # "󰄾 $(fsi --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command fsi).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
+        # "󰄾 $(dotnet fsi --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command fsi).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 Microsoft (R) .NET SDK version $(dotnet --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command dotnet).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 $(dxc --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command dxc).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 $((clang-cl --version)[0]) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command clang-cl).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 $(git --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command git).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         "󰄾 $((cmake --version)[0]) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command cmake).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
-        "󰄾 ninja version $(ninja --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command ninja).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
+        # "󰄾 ninja version $(ninja --version) @ $((Get-ItemPropertyValue -Name Directory $(Get-Command ninja).Source) -Replace 'C:\\Program Files\\Microsoft Visual Studio\\([^\\]*)\\([^\\]*)\\','[ $1 $2]::')"
         ""
     }
 
@@ -147,8 +152,8 @@ function Edit-OMPTheme {
 }
 
 function Set-GitProxy {
-    git config --global http.proxy http://127.0.0.1:7890
-    git config --global https.proxy https://127.0.0.1:7890
+    git config --global http.proxy http://127.0.0.1:12334
+    git config --global https.proxy https://127.0.0.1:12334
 }
 
 function Unset-GitProxy {

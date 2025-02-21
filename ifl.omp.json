@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "$schema": "https://raw.githubusercontent.com/LNKLEO/OMP/main/themes/schema.json",
   "blocks": [
     {
       "alignment": "left",
@@ -272,10 +272,10 @@
   ],
   "console_title_template": "{{.Folder}}",
   "osc99": true,
-  // "transient_prompt": {
-  //   "background": "transparent",
-  //   "foreground": "#FEF5ED",
-  //   "template": "{{if .WSL}}\ue712 {{else}}{{end}}{{if .Root}}\uF0E7 {{else}}{{end}} "
-  // },
+  "transient_prompt": {
+    "background": "transparent",
+    "foreground": "#FEF5ED",
+    "template": "{{if .WSL}}\ue712 {{else}}{{end}}{{if .Root}}\uF0E7 {{else}}{{end}} "
+  },
   "version": 2
 }
