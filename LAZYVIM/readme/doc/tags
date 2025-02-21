@@ -7,17 +7,10 @@ blink-cmp-copilot-lazy	blink-cmp-copilot.md	/#### Lazy
 blink-cmp-copilot-packer	blink-cmp-copilot.md	/#### Packer
 blink-cmp-copilot-setup	blink-cmp-copilot.md	/## Setup
 blink-cmp-copilot-source-definition	blink-cmp-copilot.md	/#### Source Definition
-blink.cmp-blink-completion-blink-cmp	blink.cmp.md	/# Blink Completion (blink.cmp)
-blink.cmp-contributors	blink.cmp.md	/### Contributors
-blink.cmp-features	blink.cmp.md	/## Features
-blink.cmp-installation	blink.cmp.md	/## Installation
-blink.cmp-special-thanks	blink.cmp.md	/## Special Thanks
 clangd_extensions.nvim-completion-scores-https-clangd-llvm-org-extensions-code-completion-scores	clangd_extensions.nvim.md	/### \[Completion scores\](https:\/\/clangd.llvm.org\/extensions#code-completion-scores)
 clangd_extensions.nvim-configuration	clangd_extensions.nvim.md	/## Configuration:
-clangd_extensions.nvim-credits	clangd_extensions.nvim.md	/## Credits
 clangd_extensions.nvim-features	clangd_extensions.nvim.md	/## Features:
 clangd_extensions.nvim-implementation-status-of-extensions-https-clangd-llvm-org-extensions	clangd_extensions.nvim.md	/## Implementation status of \[extensions\](https:\/\/clangd.llvm.org\/extensions)
-clangd_extensions.nvim-inlay-hints-https-clangd-llvm-org-extensions-inlay-hints	clangd_extensions.nvim.md	/### \[Inlay hints\](https:\/\/clangd.llvm.org\/extensions#inlay-hints)
 clangd_extensions.nvim-installation	clangd_extensions.nvim.md	/## Installation
 clangd_extensions.nvim-memory-usage-https-clangd-llvm-org-extensions-memory-usage	clangd_extensions.nvim.md	/### \[Memory usage\](https:\/\/clangd.llvm.org\/extensions#memory-usage)
 clangd_extensions.nvim-switch-between-source-header-https-clangd-llvm-org-extensions-switch-between-sourceheader	clangd_extensions.nvim.md	/### \[Switch between source\/header\](https:\/\/clangd.llvm.org\/extensions#switch-between-sourceheader)
