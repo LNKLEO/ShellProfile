@@ -99,25 +99,14 @@
         },
         {
           "properties": {
-            "azure_devops_icon": "\uebe8",
-            "branch_ahead_icon": "\uead5",
-            "branch_behind_icon": "\uead4",
-            "branch_gone_icon": "\ueb10",
-            "branch_icon": "\ueafc",
-            "branch_identical_icon": "\ueb6a",
-            "commit_icon": "\uf417",
             "fetch_stash_count": true,
             "fetch_status": true,
             "fetch_upstream_icon": true,
-            "fetch_worktree_count": true,
-            "git_icon": "\ueafe",
-            "github_icon": "\ueb00",
-            "merge_icon": "\uebbc",
-            "tag_icon": "\uf412"
+            "fetch_worktree_count": true
           },
           "leading_diamond": "\ue0b2",
           "trailing_diamond": "\ue0b0",
-          "template": "{{.BranchStatus}}{{if .Working.Changed}}|\uf044{{.Working}}{{end}}{{if .Staging.Changed}}|\uf046{{.Staging}}{{end}}{{if gt .StashCount 0}}|\uf0c7{{.StashCount}}{{end}}{{if .Commit.Refs.Tags}}\uf412{{join \"\uf412\" .Commit.Refs.Tags}}{{end}}{{if .Detached}}({{.ShortHash}}){{else}}{{.HEAD}}=>{{.Upstream}}{{end}}@{{.RepoName}}{{if gt .WorktreeCount 0}}\uf1bb{{.WorktreeCount}}{{end}}\ue0b3{{if .UpstreamIcon}}{{.UpstreamIcon}}{{else}} \ueafe {{end}}",
+          "template": "{{.BranchStatus}}{{if .Working.Changed}}┃\uf044{{.Working}}{{end}}{{if .Staging.Changed}}┃\uf046{{.Staging}}{{end}}{{if gt .StashCount 0}}┃\uf0c7{{.StashCount}}{{end}}┃{{if .Commit.Refs.Tags}}\uf412{{join \"\uf412\" .Commit.Refs.Tags}}{{end}}{{if .Detached}}({{.ShortHash}}){{else}}{{.HEAD}}\ue0b1{{.Upstream}}{{end}}@{{.RepoName}}{{if gt .WorktreeCount 0}}\uf1bb{{.WorktreeCount}}{{end}}\ue0b3{{if .UpstreamIcon}}{{.UpstreamIcon}}{{else}}\ueafe{{end}}",
           "foreground": "#193549",
           "background": "#addb67",
           "type": "git",
